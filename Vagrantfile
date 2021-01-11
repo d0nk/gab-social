@@ -14,6 +14,12 @@ sudo apt-add-repository 'deb https://dl.yarnpkg.com/debian/ stable main'
 # Add repo for NodeJS
 curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 
+# Add repo for Redis (so we can have a newer version than 3.0.6)
+# Sidekiq 5+ requires Redis 4+
+sudo add-apt-repository ppa:redislabs/redis
+
+sudo apt-get update
+
 # Add firewall rule to redirect 80 to PORT and save
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port #{ENV["PORT"]}
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
@@ -29,7 +35,7 @@ sudo apt-get install \
   libxslt1-dev \
   imagemagick \
   nodejs \
-  redis-server \
+  redis \
   redis-tools \
   postgresql \
   postgresql-contrib \
@@ -41,6 +47,9 @@ sudo apt-get install \
   libreadline-dev \
   libpam0g-dev \
   -y
+
+# Start Redis Server
+sudo service redis-server start
 
 # Install rvm
 read RUBY_VERSION < .ruby-version
