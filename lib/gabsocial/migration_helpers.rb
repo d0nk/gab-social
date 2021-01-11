@@ -43,7 +43,9 @@ module GabSocial
   module MigrationHelpers
     # Stub for Database.postgresql? from GitLab
     def self.postgresql?
-      ActiveRecord::Base.configurations[Rails.env]['adapter'].casecmp('postgresql').zero?
+      %w[postgresql postgresql_makara].any? do |adapter|
+        ActiveRecord::Base.configurations[Rails.env]['adapter'].casecmp(adapter).zero?
+      end
     end
 
     # Stub for Database.mysql? from GitLab
