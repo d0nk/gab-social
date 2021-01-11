@@ -3,7 +3,6 @@
 #
 # Table name: accounts
 #
-#  id                      :bigint(8)        not null, primary key
 #  username                :string           default(""), not null
 #  domain                  :string
 #  secret                  :string           default(""), not null
@@ -20,11 +19,11 @@
 #  url                     :string
 #  avatar_file_name        :string
 #  avatar_content_type     :string
-#  avatar_file_size        :integer
+#  avatar_file_size        :bigint(8)
 #  avatar_updated_at       :datetime
 #  header_file_name        :string
 #  header_content_type     :string
-#  header_file_size        :integer
+#  header_file_size        :bigint(8)
 #  header_updated_at       :datetime
 #  avatar_remote_url       :string
 #  subscription_expires_at :datetime
@@ -36,6 +35,7 @@
 #  shared_inbox_url        :string           default(""), not null
 #  followers_url           :string           default(""), not null
 #  protocol                :integer          default(0), not null
+#  id                      :bigint(8)        not null, primary key
 #  memorial                :boolean          default(FALSE), not null
 #  moved_to_account_id     :bigint(8)
 #  featured_collection_url :string
@@ -43,10 +43,10 @@
 #  actor_type              :string
 #  discoverable            :boolean
 #  also_known_as           :string           is an Array
-#  silenced_at             :datetime
-#  suspended_at            :datetime
 #  is_pro                  :boolean          default(FALSE), not null
 #  pro_expires_at          :datetime
+#  silenced_at             :datetime
+#  suspended_at            :datetime
 #  is_verified             :boolean          default(FALSE), not null
 #  is_donor                :boolean          default(FALSE), not null
 #  is_investor             :boolean          default(FALSE), not null
