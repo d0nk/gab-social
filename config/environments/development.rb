@@ -17,7 +17,7 @@ Rails.application.configure do
   if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
 
-    config.cache_store = :redis_store, ENV['REDIS_URL'], REDIS_CACHE_PARAMS
+    config.cache_store = :redis_cache_store, REDIS_CACHE_PARAMS.merge(url: ENV['REDIS_URL'])
 
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}",
@@ -38,6 +38,9 @@ Rails.application.configure do
   config.x.vapid_private_key = vapid_key.private_key
   config.x.vapid_public_key = vapid_key.public_key
 
+  # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -48,6 +51,9 @@ Rails.application.configure do
 
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
+
+  # Highlight code that triggered database queries in logs.
+  config.active_record.verbose_query_logs = true
 
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
@@ -75,6 +81,8 @@ Rails.application.configure do
   # use letter_opener_web, accessible at  /letter_opener.
   # Otherwise, use letter_opener, which launches a browser window to view sent mail.
   config.action_mailer.delivery_method = (ENV['HEROKU'] || ENV['VAGRANT'] || ENV['REMOTE_DEV']) ? :letter_opener_web : :letter_opener
+
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.after_initialize do
     Bullet.enable        = true
