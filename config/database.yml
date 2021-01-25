@@ -5,32 +5,22 @@ default: &default
   encoding: unicode
   sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
 
-dev_connection: &dev_connection
- database: <%= ENV['DB_NAME'] || 'gabsocial_development' %>
- username: <%= ENV['DB_USER'] %>
- password: <%= ENV['DB_PASS'] %>
- host: <%= ENV['DB_HOST'] %>
- port: <%= ENV['DB_PORT'] %>
-
 development:
   <<: *default
   adapter: postgresql_makara
   prepared_statements: false
+  database: <%= ENV['DB_NAME'] || 'gabsocial_development' %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASS'] %>
+  host: <%= ENV['DB_HOST'] %>
+  port: <%= ENV['DB_PORT'] %>
   makara:
     id: postgres
     sticky: true
     connections:
       - role: master
-        <<: *dev_connection
         blacklist_duration: 0
       - role: slave
-        <<: *dev_connection
-
-#  database: <%= ENV['DB_NAME'] || 'gabsocial_development' %>
-#  username: <%= ENV['DB_USER'] %>
-#  password: <%= ENV['DB_PASS'] %>
-#  host: <%= ENV['DB_HOST'] %>
-#  port: <%= ENV['DB_PORT'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
