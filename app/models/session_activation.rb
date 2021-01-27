@@ -44,8 +44,10 @@ class SessionActivation < ApplicationRecord
     end
 
     def activate(**options)
+      SessionActivation.record_timestamps = true
       activation = create!(options)
       purge_old
+      SessionActivation.record_timestamps = false
       activation
     end
 

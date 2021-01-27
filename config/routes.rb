@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   Doorkeeper::AccessToken.connection.stick_to_master!
   Doorkeeper::AccessGrant.connection.stick_to_master!
   SessionActivation.connection.stick_to_master!
+  SessionActivation.record_timestamps = false
 
   use_doorkeeper do
     controllers authorizations: 'oauth/authorizations',
