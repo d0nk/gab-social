@@ -47,12 +47,12 @@ class Api::V1::Groups::AccountsController < Api::BaseController
       @join_request.destroy_all
     else
       authorize @group, :leave?
-      GroupAccount.where(group: @group, account_id: current_account.id).destroy_all
+      GroupAccount.where(group: @group, account_id: current_account.id, role: nil).destroy_all
     end
 
     render json: @group, serializer: REST::GroupRelationshipSerializer, relationships: relationships
   end
-  
+
   private
 
   def relationships
