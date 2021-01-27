@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if ENV['STATSD_ADDR'].present?
+if false && ENV['STATSD_ADDR'].present?
   host, port = ENV['STATSD_ADDR'].split(':')
 
   statsd = ::Statsd.new(host, port)
