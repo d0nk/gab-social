@@ -25,7 +25,7 @@ class Settings::ProfilesController < Settings::BaseController
         AccountUsernameChange.create!(
           account: @account,
           from_username: @account.username,
-          to_username: params[:account][:username]
+          to_username: params[:account][:username] || ''
         )
       end
 

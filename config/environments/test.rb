@@ -27,6 +27,9 @@ Rails.application.configure do
   # and should not be used.
   config.cache_store = :memory_store
 
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
+
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 

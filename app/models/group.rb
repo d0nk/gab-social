@@ -8,7 +8,7 @@
 #  description              :string           not null
 #  cover_image_file_name    :string
 #  cover_image_content_type :string
-#  cover_image_file_size    :integer
+#  cover_image_file_size    :bigint(8)
 #  cover_image_updated_at   :datetime
 #  is_nsfw                  :boolean          default(FALSE), not null
 #  is_featured              :boolean          default(FALSE), not null
@@ -18,7 +18,7 @@
 #  member_count             :integer          default(0)
 #  slug                     :text
 #  is_private               :boolean          default(FALSE)
-#  is_visible               :boolean          default(FALSE)
+#  is_visible               :boolean          default(TRUE)
 #  tags                     :string           default([]), is an Array
 #  password                 :string
 #  group_category_id        :integer

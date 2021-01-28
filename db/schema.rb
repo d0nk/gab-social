@@ -2,18 +2,17 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_17_210100) do
+ActiveRecord::Schema.define(version: 2021_01_23_050026) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "account_conversations", force: :cascade do |t|
@@ -113,11 +112,11 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.string "url"
     t.string "avatar_file_name"
     t.string "avatar_content_type"
-    t.integer "avatar_file_size"
+    t.bigint "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.string "header_file_name"
     t.string "header_content_type"
-    t.integer "header_file_size"
+    t.bigint "header_file_size"
     t.datetime "header_updated_at"
     t.string "avatar_remote_url"
     t.datetime "subscription_expires_at"
@@ -136,10 +135,10 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.string "actor_type"
     t.boolean "discoverable"
     t.string "also_known_as", array: true
-    t.datetime "silenced_at"
-    t.datetime "suspended_at"
     t.boolean "is_pro", default: false, null: false
     t.datetime "pro_expires_at"
+    t.datetime "silenced_at"
+    t.datetime "suspended_at"
     t.boolean "is_verified", default: false, null: false
     t.boolean "is_donor", default: false, null: false
     t.boolean "is_investor", default: false, null: false
@@ -180,7 +179,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.bigint "user_id"
     t.string "dump_file_name"
     t.string "dump_content_type"
-    t.integer "dump_file_size"
+    t.bigint "dump_file_size"
     t.datetime "dump_updated_at"
     t.boolean "processed", default: false, null: false
     t.datetime "created_at", null: false
@@ -223,7 +222,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.boolean "is_approved", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "unread_count", default: 0, null: false
+    t.bigint "unread_count", default: 0
     t.string "chat_message_expiration_policy"
     t.boolean "is_muted", default: false, null: false
     t.index ["account_id"], name: "index_chat_conversation_accounts_on_account_id"
@@ -258,7 +257,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.string "domain"
     t.string "image_file_name"
     t.string "image_content_type"
-    t.integer "image_file_size"
+    t.bigint "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -372,7 +371,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.string "description", null: false
     t.string "cover_image_file_name"
     t.string "cover_image_content_type"
-    t.integer "cover_image_file_size"
+    t.bigint "cover_image_file_size"
     t.datetime "cover_image_updated_at"
     t.boolean "is_nsfw", default: false, null: false
     t.boolean "is_featured", default: false, null: false
@@ -382,7 +381,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.integer "member_count", default: 0
     t.text "slug"
     t.boolean "is_private", default: false
-    t.boolean "is_visible", default: false
+    t.boolean "is_visible", default: true
     t.string "tags", default: [], array: true
     t.string "password"
     t.integer "group_category_id"
@@ -409,7 +408,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
   create_table "list_accounts", force: :cascade do |t|
     t.bigint "list_id", null: false
     t.bigint "account_id", null: false
-    t.bigint "follow_id", default: 1
+    t.bigint "follow_id"
     t.index ["account_id", "list_id"], name: "index_list_accounts_on_account_id_and_list_id", unique: true
     t.index ["follow_id"], name: "index_list_accounts_on_follow_id"
     t.index ["list_id", "account_id"], name: "index_list_accounts_on_list_id_and_account_id"
@@ -439,7 +438,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.bigint "status_id"
     t.string "file_file_name"
     t.string "file_content_type"
-    t.integer "file_file_size"
+    t.bigint "file_file_size"
     t.datetime "file_updated_at"
     t.string "remote_url", default: "", null: false
     t.datetime "created_at", null: false
@@ -581,7 +580,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.string "description", default: "", null: false
     t.string "image_file_name"
     t.string "image_content_type"
-    t.integer "image_file_size"
+    t.bigint "image_file_size"
     t.datetime "image_updated_at"
     t.integer "type", default: 0, null: false
     t.text "html", default: "", null: false
@@ -684,7 +683,7 @@ ActiveRecord::Schema.define(version: 2021_01_17_210100) do
     t.string "var", default: "", null: false
     t.string "file_file_name"
     t.string "file_content_type"
-    t.integer "file_file_size"
+    t.bigint "file_file_size"
     t.datetime "file_updated_at"
     t.json "meta"
     t.datetime "created_at", null: false
