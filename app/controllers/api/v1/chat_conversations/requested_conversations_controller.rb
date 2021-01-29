@@ -4,7 +4,7 @@ class Api::V1::ChatConversations::RequestedConversationsController < Api::BaseCo
   before_action -> { authorize_if_got_token! :read, :'read:chats' }
 
   before_action :require_user!
-  after_action :insert_pagination_headers
+  after_action :insert_pagination_headers, only: :index
 
   def index
     @chat_conversations = load_chat_conversations
