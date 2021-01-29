@@ -17,6 +17,7 @@ module UserTrackingConcern
   end
 
   def user_needs_sign_in_update?
-    user_signed_in? && (current_user.current_sign_in_at.nil? || current_user.current_sign_in_at < UPDATE_SIGN_IN_HOURS.hours.ago)
+    # user_signed_in? && (current_user.current_sign_in_at.nil? || current_user.current_sign_in_at < UPDATE_SIGN_IN_HOURS.hours.ago)
+    false
   end
 end

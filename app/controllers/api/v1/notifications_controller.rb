@@ -25,7 +25,7 @@ class Api::V1::NotificationsController < Api::BaseController
   end
 
   def mark_read
-    current_account.notifications.find(params[:id]).mark_read!
+    # current_account.notifications.find(params[:id]).mark_read!
     render_empty_success
   end
 
