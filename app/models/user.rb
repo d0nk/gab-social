@@ -159,6 +159,24 @@ class User < ApplicationRecord
     prepare_returning_user!
   end
 
+  def update_sign_in!(request, new_sign_in: false)
+    old_current, new_current = current_sign_in_at, Time.now.utc
+    self.last_sign_in_at     = old_current || new_current
+    self.current_sign_in_at  = new_current
+
+    old_current, new_current = current_sign_in_ip, request.remote_ip
+    self.last_sign_in_ip     = old_current || new_current
+    self.current_sign_in_ip  = new_current
+
+    if new_sign_in
+      self.sign_in_count ||= 0
+      self.sign_in_count  += 1
+    end
+
+    save(validate: false) unless new_record?
+    prepare_returning_user!
+  end
+
   def disable_two_factor!
     self.otp_required_for_login = false
     otp_backup_codes&.clear
