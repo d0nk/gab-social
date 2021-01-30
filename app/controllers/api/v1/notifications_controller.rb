@@ -25,6 +25,11 @@ class Api::V1::NotificationsController < Api::BaseController
   end
 
   def mark_read
+    if !params[:id].nil? and !current_account.user.nil?
+      conn = ActiveRecord::Base.connection
+      conn.stick_to_master!
+      conn.exec_query "update users set last_read_notification = #{params[:id].to_i} where id = #{current_account.user.id}"
+    end
     # current_account.notifications.find(params[:id]).mark_read!
     render_empty_success
   end
