@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../app/lib/sidekiq_error_handler'
+
 namespace    = ENV.fetch('REDIS_NAMESPACE') { nil }
 redis_params = { url: ENV['REDIS_URL'] }
 
