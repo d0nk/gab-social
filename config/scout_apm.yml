@@ -21,12 +21,12 @@ common: &defaults
 
 production:
   <<: *defaults
-  monitor: true
+  monitor: false
   auto_instruments: true
 
 development:
   <<: *defaults
-  monitor: true
+  monitor: false
   auto_instruments: true
 
 test:
