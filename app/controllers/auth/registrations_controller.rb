@@ -107,7 +107,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
       "serverKey" => ENV.fetch('GAB_CAPTCHA_SECRET_KEY', ''),
       "value" => typedChallenge,
       "username" => username,
-      "ip" => request.env['REMOTE_ADDR']
+      "ip" => request.headers['CF-Real-IP']
     }).perform do |res|
       body = JSON.parse(res.body_with_limit)
       result = !!body["success"]
