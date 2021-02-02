@@ -50,6 +50,9 @@ class SortingQueryBuilder < BaseService
         select q.* from (
         select s.*
         from statuses s
+        join accounts a
+          on s.account_id = a.id
+          and a.is_flagged_as_spam is false
         join group_accounts ga
           on s.group_id = ga.group_id
           and ga.account_id = #{account_id} "
@@ -91,6 +94,8 @@ class SortingQueryBuilder < BaseService
       query = Status.without_replies.without_reblogs
       query = query.with_public_visibility if group.nil?
       query = query.where('statuses.created_at > ?', date_limit)
+      query = query.joins(:account)
+      query = query.where('accounts.is_flagged_as_spam is false')
       if source == "explore"
         query = query.where(group: nil)
       else
@@ -106,6 +111,8 @@ class SortingQueryBuilder < BaseService
       query = query.where('status_stats.replies_count > ?', min_replies) unless sort_type == 'recent'
       query = query.where('status_stats.reblogs_count > ?', min_reblogs) unless sort_type == 'recent'
       query = query.where('status_stats.favourites_count > ?', min_likes) unless sort_type == 'recent'
+      query = query.joins(:account)
+      query = query.where('accounts.is_flagged_as_spam is false')
       query = query.joins(:status)
       query = query.where('statuses.reblog_of_id IS NULL')
       query = query.where('statuses.in_reply_to_id IS NULL')
