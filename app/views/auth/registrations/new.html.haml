@@ -5,8 +5,9 @@
   = render partial: 'shared/og'
 
 = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  %h2.form-title Sign up for Gab
-
+  %div{style: "display:flex;flex-direction:row;height:36px;width:100%;align-items:center;margin-bottom:15px;"}
+    %h2.form-title{style: "padding:0;margin:0 auto;"} Sign up for Gab
+    
   = render 'shared/error_messages', object: resource
 
   = f.simple_fields_for :account do |ff|
@@ -22,9 +23,12 @@
   .fields-group
     = f.input :password_confirmation, wrapper: :with_label, label: t('simple_form.labels.defaults.confirm_password'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.confirm_password'), :autocomplete => 'off' }
 
-  .fields-group
-    = f.input :challenge, wrapper: :with_label, label: "Are you a human? What is #{@challenge_add_1} + #{@challenge_add_2} = ", required: true, input_html: { 'aria-label' => "Are you a human? What is #{@challenge_add_1} + #{@challenge_add_2}", :autocomplete => 'off' }
-
+  .fields-group{style: "flex-direction:column;"}
+    = f.input :challenge, wrapper: :with_label, label: "Are you a human? Enter the text below.", required: true, input_html: { 'aria-label' => "Are you a human? Enter the text below.", :autocomplete => 'off' }
+    %span{style: "margin-top:5px;font-size:12px;color:red;"}= flash[:captcha_error]
+    %div#gab-captcha{style: "display:block;position:relative;width:240px;height:100px;margin-top:10px;border-radius:6px;overflow:hidden;border:1px solid #ccc;"}
+      %span{style:"display:block;position:absolute;line-height:100px;width:240px;height:100px;top:0;left:0;right:0;bottom:0;text-align:center;color:#ccc;"} •   •   •
+ 
   .fields-group-agreement
     = f.input :agreement, as: :boolean, wrapper: :with_label, label: t('auth.checkbox_agreement_html', about_tos_path: about_tos_path)
 
@@ -32,3 +36,6 @@
     = f.button :button, t('auth.register'), type: :submit
 
 .form-footer= render 'auth/shared/links'
+
+
+%script{src: "https://captcha.gab.com/captcha/#{ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '')}/challenge.js?b=#{@challenge_buster}", type: "application/javascript" }
