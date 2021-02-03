@@ -19,11 +19,11 @@ class HTMLRenderer < Redcarpet::Render::HTML
   def double_emphasis(text)
     "<strong>#{text}</strong>"
   end
-  
+
   def emphasis(text)
     "<em>#{text}</em>"
   end
-  
+
   def header(text, header_level)
     "<h1>#{text}</h1>"
   end
@@ -31,15 +31,15 @@ class HTMLRenderer < Redcarpet::Render::HTML
   def paragraph(text)
     "<p>#{text}</p>"
   end
-  
+
   def triple_emphasis(text)
     "<b><em>#{text}</em></b>"
   end
-  
+
   def strikethrough(text)
     "<del>#{text}</del>"
   end
-  
+
   def underline(text)
     "<u>#{text}</u>"
   end
@@ -53,7 +53,7 @@ class HTMLRenderer < Redcarpet::Render::HTML
       content
     end
   end
-  
+
   def list_item(text, list_type)
     "<li>#{text}</li>"
   end
@@ -481,7 +481,7 @@ class Formatter
   end
 
   def mention_html(account)
-    return "<span>@#{encode(account.acct)}</span>" unless account.local?
+    # return "<span>@#{encode(account.acct)}</span>" unless account.local?
     "<a data-focusable=\"true\" role=\"link\" href=\"#{encode(TagManager.instance.url_for(account))}\" class=\"u-url mention\">@#{encode(account.acct)}</a>"
   end
 
