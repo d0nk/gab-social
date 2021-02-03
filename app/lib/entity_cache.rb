@@ -8,7 +8,7 @@ class EntityCache
   MAX_EXPIRATION = 7.days.freeze
 
   def mention(username, domain)
-    Rails.cache.fetch(to_key(:mention, username, domain), expires_in: MAX_EXPIRATION) { Account.select(:username, :domain, :url).find_local(username) }
+    Rails.cache.fetch(to_key(:mention, username, domain), expires_in: MAX_EXPIRATION) { Account.select(:username, :domain, :url) }
   end
 
   def emoji(shortcodes, domain = nil)
