@@ -15,6 +15,7 @@ class IntroduceAccountProWorker
   private
 
   def deliver_email(date_range)
+    return if @acct.nil? or @acct.user.nil?
     UserMailer.introduce_pro(@acct.user, date_range).deliver_now!
     @acct.user.touch(:last_emailed_at)
   end

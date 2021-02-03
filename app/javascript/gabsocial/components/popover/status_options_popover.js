@@ -289,7 +289,7 @@ class StatusOptionsPopover extends ImmutablePureComponent {
       })
       menu.push({
         title: intl.formatMessage(messages.admin_status),
-        href: `/admin/accounts/${status.getIn(['account', 'id'])}/statuses/${status.get('id')}`
+        href: `/admin/accounts/${status.getIn(['account', 'id'])}/account_statuses/${status.get('id')}`
       })
     }
 

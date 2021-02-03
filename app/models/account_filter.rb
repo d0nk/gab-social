@@ -58,6 +58,8 @@ class AccountFilter
       Account.joins(:account_stat)
     when "sign_up_date_gte"
       Account.where("created_at >= ?", value)
+    when "spam"
+      Account.where(is_flagged_as_spam: true)
     else
       raise "Unknown filter: #{key}"
     end

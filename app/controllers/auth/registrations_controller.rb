@@ -3,26 +3,22 @@
 class Auth::RegistrationsController < Devise::RegistrationsController
   layout :determine_layout
 
-  before_action :set_challenge, only: [:new]
   before_action :check_enabled_registrations, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
   before_action :set_sessions, only: [:edit, :update]
   before_action :set_instance_presenter, only: [:new, :create, :update]
   before_action :set_body_classes, only: [:new, :create, :edit, :update]
   before_action :set_cache_headers, only: [:edit, :update]
+  prepend_before_action :check_captcha, only: [:create]
 
   def new
+    set_challenge_buster
     super
   end
 
   def create
-    if session[:challenge_answer].to_s == params[:user][:challenge].to_s.strip
-      # Reset after, may be errors to return and this ensures its still visible
-      set_challenge
-      super
-    else
-      return false
-    end
+    set_challenge_buster
+    super
   end
 
   def destroy
@@ -66,6 +62,18 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   private
 
+  def check_captcha
+    unless passed_challenge?(params["gab-captcha-st"], params[:user])
+      self.resource = resource_class.new configure_sign_up_params
+      resource.validate # Look for any other validation errors besides reCAPTCHA
+      flash[:captcha_error] = "Incorrect text. Please try again."
+      set_challenge_buster
+      respond_with_navigational(resource) {
+        redirect_to new_user_registration_path
+      }
+    end 
+  end
+
   def set_instance_presenter
     @instance_presenter = InstancePresenter.new
   end
@@ -74,10 +82,37 @@ class Auth::RegistrationsController < Devise::RegistrationsController
     @body_classes = %w(edit update).include?(action_name) ? 'admin' : ''
   end
 
-  def set_challenge
-    @challenge_add_1 = rand(0...9)
-    @challenge_add_2 = rand(0...9)
-    session[:challenge_answer] = @challenge_add_1 + @challenge_add_2
+  def set_challenge_buster
+    @challenge_buster = SecureRandom.hex
+  end
+
+  def passed_challenge?(serverToken, userParams)
+    # Log if captcha keys not present in ENV
+    if ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '').empty? || ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '').nil?
+      Rails.logger.debug "RegistrationsController: GAB_CAPTCHA_CLIENT_KEY is undefined"
+    end
+
+    # Log and return false is captcha key is not present. This will disallow anyone from signing up
+    if ENV.fetch('GAB_CAPTCHA_SECRET_KEY', '').empty? || ENV.fetch('GAB_CAPTCHA_SECRET_KEY', '').nil?
+      Rails.logger.debug "RegistrationsController: GAB_CAPTCHA_SECRET_KEY is undefined"
+      return false
+    end
+
+    typedChallenge = userParams[:challenge]
+    username = userParams[:account_attributes][:username]
+
+    return false if serverToken.nil? || serverToken.empty? || typedChallenge.nil? || typedChallenge.empty?
+    
+    Request.new(:post, "https://captcha.gab.com/captcha/#{serverToken}/verify", form: {
+      "serverKey" => ENV.fetch('GAB_CAPTCHA_SECRET_KEY', ''),
+      "value" => typedChallenge,
+      "username" => username,
+      "ip" => request.headers['CF-Real-IP']
+    }).perform do |res|
+      body = JSON.parse(res.body_with_limit)
+      result = !!body["success"]
+      return result
+    end
   end
 
   def determine_layout

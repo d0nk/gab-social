@@ -142,6 +142,9 @@
                 %span YES
               - else
                 %span no
+            - if @account.is_flagged_as_spam?
+              %td= table_link_to 'ban', 'Reset', reset_spam_admin_account_path(@account.id), method: :post
+
 
           %tr
             %th= t('admin.accounts.most_recent_ip')

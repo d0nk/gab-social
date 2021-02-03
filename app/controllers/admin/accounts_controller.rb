@@ -2,7 +2,7 @@
 
 module Admin
   class AccountsController < BaseController
-    before_action :set_account, only: [:show, :redownload, :remove_avatar, :remove_header, :enable, :unsilence, :unsuspend, :memorialize, :approve, :reject, :verify, :unverify, :add_donor_badge, :remove_donor_badge, :add_investor_badge, :remove_investor_badge, :edit_pro, :save_pro, :edit, :update]
+    before_action :set_account, only: [:show, :redownload, :remove_avatar, :remove_header, :enable, :unsilence, :unsuspend, :memorialize, :approve, :reject, :verify, :unverify, :add_donor_badge, :remove_donor_badge, :add_investor_badge, :remove_investor_badge, :edit_pro, :save_pro, :edit, :update, :reset_spam]
     before_action :require_remote_account!, only: [:redownload]
     before_action :require_local_account!, only: [:enable, :memorialize, :approve, :reject]
 
@@ -173,6 +173,11 @@ module Admin
       end
     end
 
+    def reset_spam
+      @account.is_flagged_as_spam = false
+      @account.save!
+      redirect_to admin_account_path(@account.id)
+    end
 
     private
 
@@ -201,6 +206,7 @@ module Admin
         :pending,
         :silenced,
         :suspended,
+        :spam,
         :username,
         :display_name,
         :email,

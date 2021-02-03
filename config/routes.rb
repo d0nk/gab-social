@@ -140,6 +140,7 @@ Rails.application.routes.draw do
         post :remove_donor_badge
         post :add_investor_badge
         post :remove_investor_badge
+        post :reset_spam
         get :edit_pro
         put :save_pro
       end
