@@ -206,6 +206,7 @@ module Admin
         :pending,
         :silenced,
         :suspended,
+        :spam,
         :username,
         :display_name,
         :email,
