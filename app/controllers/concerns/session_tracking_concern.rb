@@ -19,6 +19,6 @@ module SessionTrackingConcern
   end
 
   def session_needs_update?
-    !current_session.nil? && current_session.updated_at < UPDATE_SIGN_IN_HOURS.hours.ago
+    !current_session.nil? && current_session.updated_at > UPDATE_SIGN_IN_HOURS.hours.ago
   end
 end
