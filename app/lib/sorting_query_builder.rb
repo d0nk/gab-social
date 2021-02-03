@@ -114,6 +114,11 @@ class SortingQueryBuilder < BaseService
       query = query.joins(:status)
       query = query.where('statuses.reblog_of_id IS NULL')
       query = query.where('statuses.in_reply_to_id IS NULL')
+      query = query.joins(<<-SQL).
+        join accounts
+        on statuses.account_id = accounts.id
+      SQL
+      where('accounts.is_flagged_as_spam is false')
       if source == "explore"
         query = query.where('statuses.group_id': nil)
       else
