@@ -141,6 +141,7 @@ group :development do
   gem 'capistrano-yarn', '~> 2.0'
 
   gem 'derailed_benchmarks'
+  gem 'rack-mini-profiler'
   gem 'stackprof'
 end
 
