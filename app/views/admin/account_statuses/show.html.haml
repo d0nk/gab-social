@@ -11,7 +11,7 @@
 
 %hr.spacer/
 
-= form_for(@form, url: admin_account_statuses_path(@account.id)) do |f|
+= form_for(@form, url: admin_account_account_statuses_path(@account.id)) do |f|
   = hidden_field_tag :page, params[:page]
   = hidden_field_tag :media, params[:media]
 
