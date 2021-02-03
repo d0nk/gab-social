@@ -19,11 +19,11 @@ class HTMLRenderer < Redcarpet::Render::HTML
   def double_emphasis(text)
     "<strong>#{text}</strong>"
   end
-
+  
   def emphasis(text)
     "<em>#{text}</em>"
   end
-
+  
   def header(text, header_level)
     "<h1>#{text}</h1>"
   end
@@ -31,15 +31,15 @@ class HTMLRenderer < Redcarpet::Render::HTML
   def paragraph(text)
     "<p>#{text}</p>"
   end
-
+  
   def triple_emphasis(text)
     "<b><em>#{text}</em></b>"
   end
-
+  
   def strikethrough(text)
     "<del>#{text}</del>"
   end
-
+  
   def underline(text)
     "<u>#{text}</u>"
   end
@@ -53,7 +53,7 @@ class HTMLRenderer < Redcarpet::Render::HTML
       content
     end
   end
-
+  
   def list_item(text, list_type)
     "<li>#{text}</li>"
   end
@@ -115,11 +115,11 @@ class Formatter
 
     return '' if raw_content.blank?
 
-    # unless status.local?
-    #  html = reformat(raw_content)
-    #  html = encode_custom_emojis(html, status.emojis, options[:autoplay]) if options[:custom_emojify]
-    #  return html.html_safe # rubocop:disable Rails/OutputSafety
-    # end
+    unless status.local?
+      html = reformat(raw_content)
+      html = encode_custom_emojis(html, status.emojis, options[:autoplay]) if options[:custom_emojify]
+      return html.html_safe # rubocop:disable Rails/OutputSafety
+    end
 
     linkable_accounts = status.active_mentions.map(&:account)
     linkable_accounts << status.account
@@ -167,15 +167,14 @@ class Formatter
   end
 
   def plaintext(status)
-    return status.text
-    #if status.local?
+    return status.text if status.local?
 
-    #text = status.text.gsub(/(<br \/>|<br>|<\/p>)+/) { |match| "#{match}\n" }
-    #strip_tags(text)
+    text = status.text.gsub(/(<br \/>|<br>|<\/p>)+/) { |match| "#{match}\n" }
+    strip_tags(text)
   end
 
   def simplified_format(account, **options)
-    html = linkify(account.note)
+    html = account.local? ? linkify(account.note) : reformat(account.note)
     html = encode_custom_emojis(html, account.emojis, options[:autoplay]) if options[:custom_emojify]
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
@@ -203,7 +202,7 @@ class Formatter
   end
 
   def format_field(account, str, **options)
-    html = encode_and_link_urls(str, me: true)
+    html = account.local? ? encode_and_link_urls(str, me: true) : reformat(str)
     html = encode_custom_emojis(html, account.emojis, options[:autoplay]) if options[:custom_emojify]
     html.html_safe # rubocop:disable Rails/OutputSafety
   end
@@ -482,7 +481,7 @@ class Formatter
   end
 
   def mention_html(account)
-    # return "<span>@#{encode(account.acct)}</span>" unless account.local?
+    return "<span>@#{encode(account.acct)}</span>" unless account.local?
     "<a data-focusable=\"true\" role=\"link\" href=\"#{encode(TagManager.instance.url_for(account))}\" class=\"u-url mention\">@#{encode(account.acct)}</a>"
   end
 
