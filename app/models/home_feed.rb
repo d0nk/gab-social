@@ -39,18 +39,18 @@ class HomeFeed < Feed
           and not exists(select mm.target_account_id from mutes mm where mm.account_id = #{@id} and mm.target_account_id in (s.account_id, r.account_id))
           and not exists(select bb.target_account_id from blocks bb where bb.account_id = #{@id} and bb.target_account_id in (s.account_id, r.account_id))
           #{pagination_max}
-          #{pagination_min}
-         order by s.created_at desc
+                       #{pagination_min}
+         order by s.id desc
           limit #{limit}
         ) sid
-        inner join statuses s on sid.id = s.id
       )
       select
-        s.*
+        so.*
       from cte
-      inner join statuses s on cte.id = s.id
+      inner join statuses so on cte.id = so.id
       where
-          (cte.rn_dupe = 1 or cte.reblog_of_id is null)
+          cte.rn_dupe = 1 or cte.reblog_of_id is null
+      order by so.created_at desc
     "
   end
 end
