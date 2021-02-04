@@ -28,7 +28,7 @@ class SortingQueryBuilder < BaseService
       date_limit = 1.year.ago
     end
 
-    top_order = 'status_stats.favourites_count DESC, status_stats.reblogs_count DESC, status_stats.replies_count DESC'
+    top_order = 'status_stats.replies_count DESC, status_stats.reblogs_count DESC, status_stats.favourites_count DESC'
     valid_sort_types = [
       'hot',
       'newest',
@@ -70,7 +70,7 @@ class SortingQueryBuilder < BaseService
         and s.reblog_of_id is null "
       if sort_type != 'newest'
         query += "
-        order by ss.favourites_count desc, ss.reblogs_count desc, ss.replies_count desc "
+        order by ss.replies_count desc, ss.reblogs_count desc, ss.favourites_count desc "
       else
         query += "
         order by s.created_at desc "
