@@ -17,7 +17,7 @@ class VoteService < BaseService
       end
     end
 
-    ActivityTracker.increment('activity:interactions')
+    # ActivityTracker.increment('activity:interactions')
   end
 
 end

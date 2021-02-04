@@ -28,7 +28,7 @@ class ReblogService < BaseService
     text = options[:status] || ''
     reblog = account.statuses.create!(reblog: reblogged_status, text: text, visibility: visibility)
 
-    DistributionWorker.perform_async(reblog.id)
+    # DistributionWorker.perform_async(reblog.id)
 
     create_notification(reblog)
     bump_potential_friendship(account, reblog)
@@ -47,7 +47,7 @@ class ReblogService < BaseService
   end
 
   def bump_potential_friendship(account, reblog)
-    ActivityTracker.increment('activity:interactions')
+    # ActivityTracker.increment('activity:interactions')
     return if account.following?(reblog.reblog.account_id)
     PotentialFriendshipTracker.record(account.id, reblog.reblog.account_id, :reblog)
   end

@@ -8,9 +8,9 @@ class ProcessQuoteService < BaseService
       create_notification(status)
       bump_potential_friendship(status)
     end
-  
+
     private
-  
+
     def create_notification(status)
       quoted_status = status.quote
 
@@ -18,12 +18,11 @@ class ProcessQuoteService < BaseService
         LocalNotificationWorker.perform_async(quoted_status.account_id, status.id, status.class.name)
       end
     end
-  
+
     def bump_potential_friendship(status)
-      ActivityTracker.increment('activity:interactions')
+      # ActivityTracker.increment('activity:interactions')
       return if status.account.following?(status.quote.account_id)
       PotentialFriendshipTracker.record(status.account_id, status.quote.account_id, :reblog)
     end
-  
+
   end
-  
