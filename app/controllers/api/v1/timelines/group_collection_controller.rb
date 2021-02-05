@@ -32,7 +32,7 @@ class Api::V1::Timelines::GroupCollectionController < Api::BaseController
   private
 
   def set_sort_type
-    @sort_type = 'hot'
+    @sort_type = 'newest'
     @sort_type = params[:sort_by] if [
       'hot',
       'newest',
