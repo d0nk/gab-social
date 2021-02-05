@@ -3,6 +3,8 @@
 class LocalNotificationWorker
   include Sidekiq::Worker
 
+  sidekiq_options queue: 'default', retry: 3
+
   def perform(receiver_account_id, activity_id = nil, activity_class_name = nil)
     return true if activity_id.nil? or activity_class_name.nil?
 
