@@ -39,8 +39,8 @@ class GroupCollectionTimeline extends React.PureComponent {
 
 		if (this.props.collectionType === 'featured' && sortByValue !== GROUP_TIMELINE_SORTING_TYPE_HOT) {
 			this.props.setFeaturedTop()
-		} else if (!!me && this.props.collectionType === 'member' && sortByValue !== GROUP_TIMELINE_SORTING_TYPE_HOT) {
-			this.props.setMemberHot()
+		} else if (!!me && this.props.collectionType === 'member' && sortByValue !== GROUP_TIMELINE_SORTING_TYPE_NEWEST) {
+			this.props.setMemberNewest()
 		} else {
 			const sortBy = getSortBy(sortByValue, sortByTopValue)
 			this.props.onExpandGroupCollectionTimeline(collectionType, { sortBy })
