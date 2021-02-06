@@ -40,7 +40,7 @@ class HomeFeed < Feed
           and not exists(select bb.target_account_id from blocks bb where bb.account_id = #{@id} and bb.target_account_id in (s.account_id, r.account_id))
           #{pagination_max}
                        #{pagination_min}
-         order by s.created_ad desc
+         order by s.created_at desc
           limit #{limit}
         ) sid
       )
