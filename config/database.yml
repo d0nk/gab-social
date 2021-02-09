@@ -44,26 +44,29 @@ test:
 #  host: <%= ENV['DB_HOST'] || 'localhost' %>
 #  port: <%= ENV['DB_PORT'] || 5432 %>
 #  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
-
 production:
   master:
     adapter: postgresql
+    sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
+    prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
     url: <%= ENV['DB_MASTER_URL'] %>
     pool: <%= ENV['DB_POOL'] %>
     timeout: 5000
     encoding: unicode
   slave1:
     adapter: postgresql
+    sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
+    prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
     url: <%= ENV['DB_SLAVE1_URL'] %>
     pool: <%= ENV['DB_POOL'] %>
     timeout: 5000
     encoding: unicode
   slave2:
     adapter: postgresql
+    sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
+    prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
     url: <%= ENV['DB_SLAVE1_URL'] %>
     pool: <%= ENV['DB_POOL'] %>
     timeout: 5000
     encoding: unicode
-
-
-
+    
