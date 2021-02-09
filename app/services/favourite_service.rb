@@ -14,7 +14,6 @@ class FavouriteService < BaseService
     begin
       favourite = Favourite.find_by(account: account, status: status)
     rescue ActiveRecord::RecordNotFound
-      Favourite.connection.stick_to_master!
       favourite = Favourite.find_by(account: account, status: status)
     end
 

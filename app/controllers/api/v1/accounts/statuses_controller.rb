@@ -22,11 +22,17 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   private
 
   def set_account
-    @account = Account.find(params[:account_id])
+    ActiveRecord::Base.connected_to(role: :reading) do
+      @account = Account.find(params[:account_id])
+    end
   end
 
   def load_statuses
-    cached_account_statuses
+    cas = nil
+    ActiveRecord::Base.connected_to(role: :reading) do
+      cas = cached_account_statuses
+    end
+    cas
   end
 
   def cached_account_statuses

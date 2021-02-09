@@ -9,6 +9,9 @@ class Oauth::AuthorizationsController < Doorkeeper::AuthorizationsController
 
   include Localized
 
+  include ForceDbWriterRole
+  around_action :force_writer_db_role, only: [:store_current_location, :render_success]
+
   private
 
   def store_current_location

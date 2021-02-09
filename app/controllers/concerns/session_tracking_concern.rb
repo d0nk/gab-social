@@ -13,9 +13,10 @@ module SessionTrackingConcern
 
   def set_session_activity
     return unless session_needs_update?
-    conn = ActiveRecord::Base.connection
-    conn.stick_to_master!
-    conn.exec_query "update session_activations set updated_at = NOW() where id = #{current_session.id}"
+    ActiveRecord::Base.connected_to(role: :writing) do
+      conn = ActiveRecord::Base.connection
+      conn.exec_query "update session_activations set updated_at = NOW() where id = #{current_session.id}"
+    end
   end
 
   def session_needs_update?

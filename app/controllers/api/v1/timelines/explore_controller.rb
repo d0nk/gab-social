@@ -39,7 +39,11 @@ class Api::V1::Timelines::ExploreController < Api::BaseController
   end
 
   def cached_explore_statuses
-    cache_collection explore_statuses, Status
+    es = nil
+    ActiveRecord::Base.connected_to(role: :reading) do
+      es = cache_collection explore_statuses, Status
+    end
+    es
   end
 
   def explore_statuses

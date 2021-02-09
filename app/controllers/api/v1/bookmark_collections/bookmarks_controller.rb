@@ -17,7 +17,11 @@ class Api::V1::BookmarkCollections::BookmarksController < Api::BaseController
   private
 
   def load_statuses
-    cached_bookmarks
+    cb = nil
+    ActiveRecord::Base.connected_to(role: :reading) do
+      cb = cached_bookmarks
+    end
+    cb
   end
 
   def cached_bookmarks
@@ -25,7 +29,7 @@ class Api::V1::BookmarkCollections::BookmarksController < Api::BaseController
       Status.reorder(nil).joins(:status_bookmarks).merge(results),
       Status
     )
-  end
+    ``  end
 
   def results
     @_results ||= account_bookmarks.paginate_by_id(
