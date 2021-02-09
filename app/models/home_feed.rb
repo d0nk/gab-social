@@ -8,7 +8,9 @@ class HomeFeed < Feed
   end
 
   def get(limit = 20, max_id = nil, since_id = nil, min_id = nil)
-    from_database(limit, max_id, since_id, min_id)
+    ActiveRecord::Base.connected_to(role: :reading) do
+      from_database(limit, max_id, since_id, min_id)
+    end
   end
 
   private

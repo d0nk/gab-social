@@ -12,7 +12,9 @@ module UserTrackingConcern
   private
 
   def set_user_activity
-    current_user.update_sign_in!(request) if user_needs_sign_in_update?
+    ActiveRecord::Base.connected_to(role: :writing) do
+      current_user.update_sign_in!(request) if user_needs_sign_in_update?
+    end
   end
 
   def user_needs_sign_in_update?

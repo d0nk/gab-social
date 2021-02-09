@@ -17,16 +17,16 @@ class ReactController < ApplicationController
   before_action :set_instance_presenter
 
   def react
-    # 
+    #
   end
-  
+
   def groupBySlug
     @group = Group.where(slug: params[:groupSlug], is_archived: false).first
     unless @group.nil?
       return redirect_to "/groups/#{@group.id}"
     end
 
-    return not_found 
+    return not_found
   end
 
   def status_show
@@ -62,7 +62,7 @@ class ReactController < ApplicationController
 
   def redirect_to_original
     if @status.reblog?
-      redirect_to ::TagManager.instance.url_for(@status.reblog) 
+      redirect_to ::TagManager.instance.url_for(@status.reblog)
     end
   end
 
@@ -75,7 +75,7 @@ class ReactController < ApplicationController
     elsif find_public_route_matches
       return
     elsif request.path.count("/") == 1 && request.path.length === 1
-      # 
+      #
     elsif request.path.count("/") == 1 && !request.path.include?("@")
       acctFromPath = request.path.sub("/", "")
       @account = Account.find_local!(acctFromPath)
@@ -108,14 +108,14 @@ class ReactController < ApplicationController
   end
 
   def initial_state_params
-    if !current_user.nil?
+    if !current_user.nil? && !current_session.nil?
       {
         settings: Web::Setting.find_by(user: current_user)&.data || {},
         push_subscription: current_account.user.web_push_subscription(current_session),
         current_account: current_account,
         token: current_session.token,
       }
-    else 
+    else
       return {}
     end
   end

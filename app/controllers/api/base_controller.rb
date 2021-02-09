@@ -65,7 +65,11 @@ class Api::BaseController < ApplicationController
   def current_resource_owner
     if doorkeeper_token
       @current_user ||= Rails.cache.fetch("dk:user:#{doorkeeper_token.resource_owner_id}", expires_in: 25.hours) do
-        User.find(doorkeeper_token.resource_owner_id)
+        u = nil
+        ActiveRecord::Base.connected_to(role: :writing) do
+          u = User.find(doorkeeper_token.resource_owner_id)
+        end
+        u
       end
     end
     return @current_user

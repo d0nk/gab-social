@@ -6,21 +6,24 @@ default: &default
   sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
 
 development:
-  <<: *default
-  adapter: postgresql_makara
-  prepared_statements: false
-  database: <%= ENV['DB_NAME'] || 'gabsocial_development' %>
-  username: <%= ENV['DB_USER'] %>
-  password: <%= ENV['DB_PASS'] %>
-  host: <%= ENV['DB_HOST'] %>
-  port: <%= ENV['DB_PORT'] %>
-  makara:
-    id: postgres
-    sticky: true
-    connections:
-      - role: master
-        blacklist_duration: 0
-      - role: slave
+  master:
+    adapter: postgresql
+    url: <%= ENV['DB_MASTER_URL'] %>
+    pool: <%= ENV['DB_POOL'] %>
+    timeout: 5000
+    encoding: unicode
+  slave1:
+    adapter: postgresql
+    url: <%= ENV['DB_SLAVE1_URL'] %>
+    pool: <%= ENV['DB_POOL'] %>
+    timeout: 5000
+    encoding: unicode
+  slave2:
+    adapter: postgresql
+    url: <%= ENV['DB_SLAVE1_URL'] %>
+    pool: <%= ENV['DB_POOL'] %>
+    timeout: 5000
+    encoding: unicode
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -33,12 +36,34 @@ test:
   host: <%= ENV['DB_HOST'] %>
   port: <%= ENV['DB_PORT'] %>
 
+#production:
+#  <<: *default
+#  database: <%= ENV['DB_NAME'] || 'gabsocial_production' %>
+#  username: <%= ENV['DB_USER'] || 'gabsocial' %>
+#  password: <%= ENV['DB_PASS'] || '' %>
+#  host: <%= ENV['DB_HOST'] || 'localhost' %>
+#  port: <%= ENV['DB_PORT'] || 5432 %>
+#  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
+
 production:
-  <<: *default
-  database: <%= ENV['DB_NAME'] || 'gabsocial_production' %>
-  username: <%= ENV['DB_USER'] || 'gabsocial' %>
-  password: <%= ENV['DB_PASS'] || '' %>
-  host: <%= ENV['DB_HOST'] || 'localhost' %>
-  port: <%= ENV['DB_PORT'] || 5432 %>
-  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
+  master:
+    adapter: postgresql
+    url: <%= ENV['DB_MASTER_URL'] %>
+    pool: <%= ENV['DB_POOL'] %>
+    timeout: 5000
+    encoding: unicode
+  slave1:
+    adapter: postgresql
+    url: <%= ENV['DB_SLAVE1_URL'] %>
+    pool: <%= ENV['DB_POOL'] %>
+    timeout: 5000
+    encoding: unicode
+  slave2:
+    adapter: postgresql
+    url: <%= ENV['DB_SLAVE1_URL'] %>
+    pool: <%= ENV['DB_POOL'] %>
+    timeout: 5000
+    encoding: unicode
+
+
 

@@ -1,8 +1,11 @@
 Warden::Manager.after_set_user except: :fetch do |user, warden|
-  if user.session_active?(warden.cookies.signed['_session_id'] || warden.raw_session['auth_id'])
-    session_id = warden.cookies.signed['_session_id'] || warden.raw_session['auth_id']
-  else
-    session_id = user.activate_session(warden.request)
+  session_id = nil
+  ActiveRecord::Base.connected_to(role: :writing) do
+    if user.session_active?(warden.cookies.signed['_session_id'] || warden.raw_session['auth_id'])
+      session_id = warden.cookies.signed['_session_id'] || warden.raw_session['auth_id']
+    else
+      session_id = user.activate_session(warden.request)
+    end
   end
 
   warden.cookies.signed['_session_id'] = {
@@ -14,17 +17,20 @@ Warden::Manager.after_set_user except: :fetch do |user, warden|
 end
 
 Warden::Manager.after_fetch do |user, warden|
-  if user.session_active?(warden.cookies.signed['_session_id'] || warden.raw_session['auth_id'])
-    warden.cookies.signed['_session_id'] = {
-      value: warden.cookies.signed['_session_id'] || warden.raw_session['auth_id'],
-      expires: 1.year.from_now,
-      httponly: true,
-      secure: (Rails.env.production? || ENV['LOCAL_HTTPS'] == 'true'),
-    }
-  else
-    warden.logout
-    throw :warden, message: :unauthenticated
+  ActiveRecord::Base.connected_to(role: :writing) do
+    if user.session_active?(warden.cookies.signed['_session_id'] || warden.raw_session['auth_id'])
+      warden.cookies.signed['_session_id'] = {
+        value: warden.cookies.signed['_session_id'] || warden.raw_session['auth_id'],
+        expires: 1.year.from_now,
+        httponly: true,
+        secure: (Rails.env.production? || ENV['LOCAL_HTTPS'] == 'true'),
+      }
+    else
+      warden.logout
+      throw :warden, message: :unauthenticated
+    end
   end
+  warden.cookies.signed['_session_id']
 end
 
 Warden::Manager.before_logout do |_, warden|

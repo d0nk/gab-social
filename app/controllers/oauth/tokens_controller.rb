@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Oauth::TokensController < Doorkeeper::TokensController
+  include ForceDbWriterRole
+  around_action :force_writer_db_role, only: :revoke
+
   def revoke
     unsubscribe_for_token if authorized? && token.accessible?
     super
