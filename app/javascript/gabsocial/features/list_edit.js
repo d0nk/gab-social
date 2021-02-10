@@ -74,9 +74,7 @@ class ListEdit extends ImmutablePureComponent {
   }
 
   handleSearchSuggestionsKeyUp = (e) => {
-    if (e.keyCode === 13) {
-      this.props.onSubmitSearchSuggestions(this.props.searchSuggestionsValue)
-    }
+    this.props.onSubmitSearchSuggestions(this.props.searchSuggestionsValue)
   }
 
   handleSearchSuggestionsSubmit = () => {

@@ -289,8 +289,6 @@ export const fetchListAccountsFail = (id, error) => ({
 export const fetchListSuggestions = (q) => (dispatch, getState) => {
   if (!me) return
 
-  return false
-
   const params = {
     q,
     resolve: false,
