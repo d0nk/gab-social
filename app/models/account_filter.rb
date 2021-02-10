@@ -60,6 +60,14 @@ class AccountFilter
       Account.where("created_at >= ?", value)
     when "spam"
       Account.where(is_flagged_as_spam: true)
+    when "is_pro"
+      Account.where(is_pro: true)
+    when "is_investor"
+      Account.where(is_investor: true)
+    when "is_donor"
+      Account.where(is_donor: true)
+    when "is_verified"
+      Account.where(is_verified: true)
     else
       raise "Unknown filter: #{key}"
     end

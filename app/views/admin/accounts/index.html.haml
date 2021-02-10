@@ -10,10 +10,14 @@
       %li= filter_link_to t('admin.accounts.moderation.suspended'), suspended: '1', silenced: nil, pending: nil
   
   .filter-subset
-    %strong Permissions
+    %strong Flags
     %ul
-      %li= filter_link_to "All", spam: nil
+      %li= filter_link_to "All", spam: nil, is_pro: nil, is_donor: nil, is_investor: nil, is_verified: nil
       %li= filter_link_to "Spam", spam: '1'
+      %li= filter_link_to "PRO", is_pro: '1'
+      %li= filter_link_to "Donor", is_donor: '1'
+      %li= filter_link_to "Investor", is_investor: '1'
+      %li= filter_link_to "Verified", is_verified: '1'
 
   .filter-subset
     %strong= t('admin.accounts.role')
@@ -47,9 +51,9 @@
     %thead
       %tr
         %th= t('admin.accounts.username')
-        %th= t('admin.accounts.most_recent_ip')
         %th= t('admin.accounts.most_recent_activity')
         %th Status count
+        %th Flags
         %th
     %tbody
       = render @accounts

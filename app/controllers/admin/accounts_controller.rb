@@ -215,6 +215,10 @@ module Admin
         :note,
         :status_count_gte,
         :sign_up_date_gte,
+        :is_pro,
+        :is_investor,
+        :is_verified,
+        :is_donor,
       )
     end
 
