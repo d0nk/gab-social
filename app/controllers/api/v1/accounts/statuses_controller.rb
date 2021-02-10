@@ -28,11 +28,9 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   end
 
   def load_statuses
-    cas = nil
     ActiveRecord::Base.connected_to(role: :reading) do
-      cas = cached_account_statuses
+      cached_account_statuses
     end
-    cas
   end
 
   def cached_account_statuses

@@ -10,16 +10,7 @@ class FavouriteService < BaseService
   def call(account, status)
     authorize_with account, status, :favourite?
 
-    favourite = nil
-    begin
-      favourite = Favourite.find_by(account: account, status: status)
-    rescue ActiveRecord::RecordNotFound
-      favourite = Favourite.find_by(account: account, status: status)
-    end
-
-    return favourite unless favourite.nil?
-
-    favourite = Favourite.create!(account: account, status: status)
+    favourite = Favourite.find_or_create_by!(account: account, status: status)
 
     create_notification(favourite)
     bump_potential_friendship(account, status)

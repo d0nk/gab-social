@@ -155,16 +155,13 @@ class User < ApplicationRecord
   end
 
   def update_tracked_fields!(request)
-    ru = nil
     ActiveRecord::Base.connected_to(role: :writing) do
       super
-      ru = prepare_returning_user!
+      prepare_returning_user!
     end
-    ru
   end
 
   def update_sign_in!(request, new_sign_in: false)
-    ru = nil
     ActiveRecord::Base.connected_to(role: :writing) do
       old_current, new_current = current_sign_in_at, Time.now.utc
       self.last_sign_in_at     = old_current || new_current
@@ -180,9 +177,8 @@ class User < ApplicationRecord
       end
 
       save(validate: false) unless new_record?
-      ru = prepare_returning_user!
+      prepare_returning_user!
     end
-    ru
   end
 
   def disable_two_factor!

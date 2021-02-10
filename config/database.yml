@@ -20,7 +20,7 @@ development:
     encoding: unicode
   slave2:
     adapter: postgresql
-    url: <%= ENV['DB_SLAVE1_URL'] %>
+    url: <%= ENV['DB_SLAVE2_URL'] %>
     pool: <%= ENV['DB_POOL'] %>
     timeout: 5000
     encoding: unicode
@@ -69,4 +69,4 @@ production:
     pool: <%= ENV['DB_POOL'] %>
     timeout: 5000
     encoding: unicode
-    
+

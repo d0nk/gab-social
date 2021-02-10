@@ -16,11 +16,9 @@ class Api::V1::Timelines::ProController < Api::BaseController
   end
 
   def cached_pro_statuses
-    ps = nil
     ActiveRecord::Base.connected_to(role: :reading) do
-      ps = cache_collection pro_statuses, Status
+      cache_collection pro_statuses, Status
     end
-    ps
   end
 
   def pro_statuses

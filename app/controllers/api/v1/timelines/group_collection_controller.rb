@@ -56,11 +56,9 @@ class Api::V1::Timelines::GroupCollectionController < Api::BaseController
   end
 
   def cached_group_collection_statuses
-    gcs = nil
     ActiveRecord::Base.connected_to(role: :reading) do
-      gcs = cache_collection group_collection_statuses, Status
+      cache_collection group_collection_statuses, Status
     end
-    gcs
   end
 
   def group_collection_statuses

@@ -8,8 +8,10 @@ Doorkeeper.configure do
   end
 
   resource_owner_from_credentials do |_routes|
-    user = User.find_by(email: request.params[:username])
-    user if !user&.otp_required_for_login? && user&.valid_password?(request.params[:password])
+    ActiveRecord::Base.connected_to(role: :writing) do
+      user = User.find_by(email: request.params[:username])
+      user if !user&.otp_required_for_login? && user&.valid_password?(request.params[:password])
+    end
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
