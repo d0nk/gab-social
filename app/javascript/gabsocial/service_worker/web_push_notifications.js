@@ -40,13 +40,12 @@ const notify = options =>
 const fetchFromApi = (path, method, accessToken) => {
   const url = (new URL(path, self.location)).href;
 
-  let headers = {
-    'Authorization': `Bearer ${accessToken}`,
-    'Content-Type': 'application/json',
-  }
-  if (!accessToken) { delete headers['Authorization'] }
   return fetch(url, {
-    headers: headers,
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+
     method: method,
     credentials: 'include',
   }).then(res => {
