@@ -889,10 +889,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@clusterws/cws@^0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@clusterws/cws/-/cws-0.14.0.tgz#242824b6884454001340222a836db6f6c5e62bfb"
-  integrity sha512-knZj3KZNHIAGsX7TUc/0Q5gcx2bKMMcTPsAOZomLKdK5a4o/umKFlttWRH84Yr1nVlQy+UMO23qfDR8gRZ/4cw==
+"@clusterws/cws@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@clusterws/cws/-/cws-3.0.0.tgz#518fc8e7d9066e220f6f6aef3158cc14d5a1e98e"
+  integrity sha512-6RO7IUbSlTO3l8XPN/9g21YGPF4HjfkidDzchkP0h6iwq5jYtji+KUCgyxcSYiuN7aWu8nGJDjBer7XJilPnOg==
 
 "@popperjs/core@^2.4.4":
   version "2.4.4"
