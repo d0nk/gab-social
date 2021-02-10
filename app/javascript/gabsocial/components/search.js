@@ -70,6 +70,8 @@ class Search extends React.PureComponent {
 
   handleSubmit = () => {
     this.props.onSubmit()
+    this.context.router.history.push(`/search?q=${this.props.value}`)
+
   }
 
   render() {
