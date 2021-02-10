@@ -8,8 +8,8 @@
     %thead
       %tr
         %th= t('verifications.moderation.id')
-        %th= t('verifications.moderation.date')
         %th= t('verifications.moderation.account')
+        %th= t('verifications.moderation.date')
         %th
     %tbody
       = render partial: 'settings/verifications/moderation/verification_request', collection: @verification_requests, as: :verification_request
