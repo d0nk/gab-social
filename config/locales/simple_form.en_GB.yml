@@ -35,7 +35,7 @@ en_GB:
         setting_noindex: Affects your public profile and status pages
         setting_show_application: The application you use to gab will be displayed in the detailed view of your gabs
         setting_theme: Affects how Gab Social looks when you're logged in from any device.
-        username: Your username will be unique on %{domain}
+        username: Only numbers, letters, periods and underscores allowed. No spaces.
         whole_word: When the keyword or phrase is alphanumeric only, it will only be applied if it matches the whole word
       featured_tag:
         name: 'You might want to use one of these:'

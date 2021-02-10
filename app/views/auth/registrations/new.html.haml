@@ -12,7 +12,7 @@
 
   = f.simple_fields_for :account do |ff|
     .fields-group
-      = ff.input :username, wrapper: :with_label, autofocus: true, label: t('simple_form.labels.defaults.username'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.username'), :autocomplete => 'off' }, hint: t('simple_form.hints.defaults.username', domain: site_hostname)
+      = ff.input :username, wrapper: :with_label, autofocus: true, label: t('simple_form.labels.defaults.username'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.username'), :autocomplete => 'off' }, hint: t('simple_form.hints.defaults.username')
 
   .fields-group
     = f.input :email, wrapper: :with_label, label: t('simple_form.labels.defaults.email'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.email'), :autocomplete => 'off' }
@@ -24,7 +24,7 @@
     = f.input :password_confirmation, wrapper: :with_label, label: t('simple_form.labels.defaults.confirm_password'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.confirm_password'), :autocomplete => 'off' }
 
   .fields-group{style: "flex-direction:column;"}
-    = f.input :challenge, wrapper: :with_label, label: "Are you a human? Enter the text below.", required: true, input_html: { 'aria-label' => "Are you a human? Enter the text below.", :autocomplete => 'off' }
+    = f.input :challenge, wrapper: :with_label, label: "Enter the text below.", required: true, input_html: { 'aria-label' => "Enter the text below.", :autocomplete => 'off' }
     %span{style: "margin-top:5px;font-size:12px;color:red;"}= flash[:captcha_error]
     %div#gab-captcha{style: "display:block;position:relative;width:240px;height:100px;margin-top:10px;border-radius:6px;overflow:hidden;border:1px solid #ccc;"}
       %span{style:"display:block;position:absolute;line-height:100px;width:240px;height:100px;top:0;left:0;right:0;bottom:0;text-align:center;color:#ccc;"} •   •   •
