@@ -537,8 +537,6 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, token) => 
     cancelFetchComposeSuggestionsAccounts()
   }
 
-  return false
-
   api(getState).get('/api/v1/accounts/search', {
     cancelToken: new CancelToken(cancel => {
       cancelFetchComposeSuggestionsAccounts = cancel
@@ -556,7 +554,7 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, token) => 
       // dispatch(showAlertForError(error))
     }
   })
-}, 200, { leading: true, trailing: true })
+}, 1000, { leading: true, trailing: true })
 
 const fetchComposeSuggestionsEmojis = (dispatch, getState, token) => {
   const results = emojiSearch(token.replace(':', ''), { maxResults: 5 })
