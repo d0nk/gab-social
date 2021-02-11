@@ -29,6 +29,7 @@ class ListItem extends React.PureComponent {
       isHidden,
       subtitle,
       isActive,
+      openInNewTab,
     } = this.props
 
     if (!title) {
@@ -98,6 +99,7 @@ class ListItem extends React.PureComponent {
         href={href}
         onClick={!!onClick ? this.handleOnClick : undefined}
         className={containerClasses}
+        target={openInNewTab ? '_blank' : undefined}
         noClasses
       >
 
@@ -173,6 +175,7 @@ ListItem.propTypes = {
     'large',
   ]),
   hideArrow: PropTypes.bool,
+  openInNewTab: PropTypes.bool,
 }
 
 export default ListItem
