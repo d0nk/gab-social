@@ -5,6 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import ImmutablePureComponent from 'react-immutable-pure-component'
 import { defineMessages, injectIntl } from 'react-intl'
 import { openPopover } from '../actions/popover'
+import { showToast } from '../actions/toasts'
 import {
   addShortcut,
   removeShortcut,
@@ -12,6 +13,7 @@ import {
 import {
   PLACEHOLDER_MISSING_HEADER_SRC,
   BREAKPOINT_EXTRA_SMALL,
+  TOAST_TYPE_SUCCESS,
 } from '../constants'
 import { me } from '../initial_state'
 import Responsive from '../features/ui/util/responsive_component'
@@ -50,6 +52,29 @@ class GroupHeader extends ImmutablePureComponent {
     }
   }
 
+  handleCopySlug = () => {
+    const { group } = this.props
+    const url = !!group ? !!group.get('slug') ? `https://gab.com/g/${group.get('slug')}` : undefined : undefined
+    if (!url) return
+    
+    const textarea = document.createElement('textarea')
+
+    textarea.textContent = url
+    textarea.style.position = 'fixed'
+
+    document.body.appendChild(textarea)
+
+    try {
+      textarea.select()
+      document.execCommand('copy')
+    } catch (e) {
+      //
+    }
+
+    document.body.removeChild(textarea)
+    this.props.onShowCopyToast()
+  }
+ 
   setInfoBtn = (c) => {
     this.infoBtn = c;
   }
@@ -160,15 +185,22 @@ class GroupHeader extends ImmutablePureComponent {
                   <div className={[_s.d, _s.w100PC].join(' ')}>
                     <div className={[_s.d, _s.flexRow].join(' ')}>
                       <Icon id='group' size='28px' className={_s.cPrimary} />
-                      <div className={[_s.d, _s.ml7, _s.flexNormal].join(' ')}>
+                      <div className={[_s.d, _s.ml7, _s.flexNormal, _s.overflowHidden].join(' ')}>
                         <Heading>
                           {title}
                         </Heading>
                         {
                           !!slug &&
-                          <Heading size='h4'>
-                            {slug}
-                          </Heading>
+                          <Button
+                            noClasses
+                            target='_blank'
+                            onClick={this.handleCopySlug}
+                            className={[_s.d, _s.flexRow, _s.mt5, _s.cursorPointer, _s.outlineNone, _s.bgTransparent, _s.inherit].join(' ')}
+                          >
+                            <Text color='secondary' size='medium' weight='medium'>
+                              {slug}
+                            </Text>
+                          </Button>
                         }
                       </div>
                     </div>
@@ -250,6 +282,11 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   },
   onRemoveShortcut(groupId) {
     dispatch(removeShortcut(null, 'group', groupId))
+  },
+  onShowCopyToast() {
+    dispatch(showToast(TOAST_TYPE_SUCCESS, {
+      type: "SUCCESSFULLY_COPIED_TO_CLIPBOARD"
+    }))
   },
 
 })
