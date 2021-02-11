@@ -1,8 +1,7 @@
 'use strict';
 
 import WebSocketClient from '@gamestdio/websocket';
-
-const randomIntUpTo = max => Math.floor(Math.random() * Math.floor(max));
+import { getRandomInt } from './utils/numbers'
 
 export function connectStream(path, pollingRefresh = null, callbacks = () => ({ onConnect() { }, onDisconnect() { }, onReceive() { } })) {
   return (dispatch, getState) => {
@@ -14,7 +13,7 @@ export function connectStream(path, pollingRefresh = null, callbacks = () => ({ 
 
     const setupPolling = () => {
       pollingRefresh(dispatch, () => {
-        polling = setTimeout(() => setupPolling(), 20000 + randomIntUpTo(20000));
+        polling = setTimeout(() => setupPolling(), 20000 + getRandomInt(0, 20000));
       });
     };
 
@@ -36,7 +35,7 @@ export function connectStream(path, pollingRefresh = null, callbacks = () => ({ 
 
       disconnected() {
         if (pollingRefresh) {
-          polling = setTimeout(() => setupPolling(), randomIntUpTo(40000));
+          polling = setTimeout(() => setupPolling(), getRandomInt(0, 40000));
         }
 
         onDisconnect();
