@@ -9,6 +9,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :set_instance_presenter, only: [:new, :create, :update]
   before_action :set_body_classes, only: [:new, :create, :edit, :update]
   before_action :set_cache_headers, only: [:edit, :update]
+  prepend_before_action :check_if_password_email_identical, only: [:create]
   prepend_before_action :check_captcha, only: [:create]
 
   def new
@@ -61,6 +62,15 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   end
 
   private
+
+  def check_if_password_email_identical
+    if params[:user][:email] == params[:user][:password]
+      flash[:alert] = "Your email cannot be your password. Please enter a new password."
+      respond_with_navigational(resource) {
+        redirect_to new_user_registration_path
+      }
+    end
+  end
 
   def check_captcha
     unless passed_challenge?(params["gab-captcha-st"], params[:user])
