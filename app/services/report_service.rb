@@ -8,6 +8,8 @@ class ReportService < BaseService
     @comment        = options.delete(:comment) || ''
     @options        = options
 
+    return nil if @target_account.suspended_at != nil
+
     create_report!
 
     @report
