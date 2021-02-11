@@ -32,6 +32,10 @@ class LinkBlock < ApplicationRecord
     link_for_fetch = TagManager.instance.normalize_link(url)
     link_for_fetch = link_for_fetch.chomp("/")
 
-    where("LOWER(link) LIKE LOWER(?)", "%#{link_for_fetch}%").exists?
+    domain_for_fetch = TagManager.instance.normalize_link_domain(url)
+
+    where("LOWER(link) LIKE LOWER(?)", "%#{link_for_fetch}").or(
+      where("LOWER(link) LIKE LOWER(?)", "#{domain_for_fetch}")
+    ).exists?
   end
 end
