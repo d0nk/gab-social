@@ -1,4 +1,5 @@
 class Settings::Verifications::ModerationController < Admin::BaseController
+
 	def index
 		@verification_requests = AccountVerificationRequest.order('created_at DESC').all
 	end
@@ -10,11 +11,12 @@ class Settings::Verifications::ModerationController < Admin::BaseController
 
 			# Mark user as verified
 			account = verification_request.account
-			account.is_verified = true
-			account.save()
+			ApplicationRecord.transaction do
+				account.update!(is_verified: true)
 
-			# Remove all traces
-			verification_request.destroy()
+				# Remove all traces
+				verification_request.destroy
+			end
 		end
 
 		# Notify user

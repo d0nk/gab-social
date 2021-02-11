@@ -23,6 +23,11 @@ class SessionActivation < ApplicationRecord
            to: :access_token,
            allow_nil: true
 
+  connects_to database: {
+    writing: :master,
+    reading: :master
+  }
+
   def detection
     @detection ||= Browser.new(user_agent)
   end

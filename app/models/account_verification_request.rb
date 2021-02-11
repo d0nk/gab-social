@@ -13,6 +13,12 @@
 #
 
 class AccountVerificationRequest < ApplicationRecord
+
+	connects_to database: {
+		writing: :master,
+		reading: :master
+	}
+
 	LIMIT            = 4.megabytes
 	IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'].freeze
 
