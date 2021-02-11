@@ -76,6 +76,10 @@ export default function getStream(streamingAPIBaseURL, accessToken, stream, { co
   const ws = new WebSocketClient(`${streamingAPIBaseURL}/api/v1/streaming/?${params.join('&')}`, accessToken);
 
   ws.onopen = connected;
+  ws.onerror = (e) => {
+    // If errors, dont retry
+    ws.close();
+  };
   ws.onmessage = e => received(JSON.parse(e.data));
   ws.onclose = disconnected;
   ws.onreconnect = reconnected;
