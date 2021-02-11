@@ -113,7 +113,8 @@ class ProfileOptionsPopover extends React.PureComponent {
         hideArrow: true,
         icon: 'circle',
         title: intl.formatMessage(messages.admin_account),
-        href: `/admin/accounts/${account.get('id')}`
+        href: `/admin/accounts/${account.get('id')}`,
+        openInNewTab: true,
       })
     }
 

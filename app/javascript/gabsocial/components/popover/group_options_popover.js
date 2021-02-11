@@ -96,7 +96,8 @@ class GroupOptionsPopover extends ImmutablePureComponent {
       listItems.push({})
       listItems.push({
         title: intl.formatMessage(messages.open_in_admin, { name: group.getIn('title') }),
-        href: `/admin/groups/${groupId}`
+        href: `/admin/groups/${groupId}`,
+        openInNewTab: true,
       })
     }
 
