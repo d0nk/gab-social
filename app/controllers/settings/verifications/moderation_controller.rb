@@ -4,26 +4,31 @@ class Settings::Verifications::ModerationController < Admin::BaseController
 	end
 
 	def approve
-		verification_request = AccountVerificationRequest.find(params[:id])
-		
-		# Mark user as verified
-		account = verification_request.account
-		account.is_verified = true
-		account.save()
+
+		ActiveRecord::Base.connected_to(role: :writing) do
+			verification_request = AccountVerificationRequest.find(params[:id])
+
+			# Mark user as verified
+			account = verification_request.account
+			account.is_verified = true
+			account.save()
+
+			# Remove all traces
+			verification_request.destroy()
+		end
 
 		# Notify user
 		UserMailer.verification_approved(account.user).deliver_later!
-
-		# Remove all traces
-		verification_request.destroy()
 
 		# Redirect back to the form with a proper message
 		redirect_to settings_verifications_moderation_url, notice: I18n.t('verifications.moderation.approved_msg')
 	end
 
 	def reject
-		verification_request = AccountVerificationRequest.find(params[:id])
-		verification_request.destroy()
+		ActiveRecord::Base.connected_to(role: :writing) do
+			verification_request = AccountVerificationRequest.find(params[:id])
+			verification_request.destroy()
+		end
 		redirect_to settings_verifications_moderation_url, notice: I18n.t('verifications.moderation.rejected_msg')
 	end
 end
