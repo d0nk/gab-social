@@ -232,6 +232,19 @@ function main ( ) {
 
     input.readonly = oldReadOnly;
   });
+
+  const handleRemoveSpecialCharactersForUsername = (e) => {
+    var input = e.target;
+    var text = input.value.replace(/[^\w\d_]/gmi, "");
+    if (/\s/.test(text)) {
+        text = text.replace(/\s/g, "");
+    }
+    input.value = text;
+  };
+
+  delegate(document, '#user_account_attributes_username.registration_username', 'keydown', handleRemoveSpecialCharactersForUsername);
+  delegate(document, '#user_account_attributes_username.registration_username', 'keyup', handleRemoveSpecialCharactersForUsername);
+  delegate(document, '#user_account_attributes_username.registration_username', 'change', handleRemoveSpecialCharactersForUsername);
 }
 
 loadPolyfills().then(main).catch(error => {

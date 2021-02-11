@@ -12,7 +12,7 @@
 
   = f.simple_fields_for :account do |ff|
     .fields-group
-      = ff.input :username, wrapper: :with_label, autofocus: true, label: t('simple_form.labels.defaults.username'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.username'), :autocomplete => 'off' }, hint: t('simple_form.hints.defaults.username')
+      = ff.input :username, wrapper: :with_label, autofocus: true, label: t('simple_form.labels.defaults.username'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.username'), :autocomplete => 'off', :class => "registration_username" }, hint: t('simple_form.hints.defaults.username')
 
   .fields-group
     = f.input :email, wrapper: :with_label, label: t('simple_form.labels.defaults.email'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.email'), :autocomplete => 'off' }
