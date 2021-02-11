@@ -60,7 +60,7 @@ class GroupCollectionItem extends ImmutablePureComponent {
     if (isAddable && groupTitle.length > 52) groupTitle = `${groupTitle.substring(0, 52).trim()}...`
 
     return (
-      <div className={_s.d}>
+      <div className={[_s.d, _s.w300PX].join(' ')}>
         <NavLink
           to={`/groups/${group.get('id')}`}
           className={navLinkClasses}

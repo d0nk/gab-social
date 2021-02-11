@@ -37,13 +37,12 @@ class FeaturedGroupsInjection extends ImmutablePureComponent {
         isXS={isXS}
         >
           {
-            groupIds.map((groupId) => (
-              <div className={[_s.d, _s.w300PX].join(' ')}>
-                <GroupCollectionItem
-                  isAddable
-                  id={groupId}
-                />
-              </div>
+            groupIds.map((groupId, i) => (
+              <GroupCollectionItem
+                isAddable
+                id={groupId}
+                key={`featured-group-${i}-${groupId}`}
+              />
             ))
           }
         </TimelineInjectionLayout>
