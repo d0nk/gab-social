@@ -52,10 +52,12 @@ class Web::PushSubscription < ApplicationRecord
 
   class << self
     def unsubscribe_for(application_id, resource_owner)
-      access_token_ids = Doorkeeper::AccessToken.where(application_id: application_id, resource_owner_id: resource_owner.id, revoked_at: nil)
-                                                .pluck(:id)
+      ActiveRecord::Base.connected_to(role: :writing) do
+        access_token_ids = Doorkeeper::AccessToken.where(application_id: application_id, resource_owner_id: resource_owner.id, revoked_at: nil)
+                                                  .pluck(:id)
 
-      where(access_token_id: access_token_ids).delete_all
+        where(access_token_id: access_token_ids).delete_all
+      end
     end
   end
 
@@ -89,12 +91,14 @@ class Web::PushSubscription < ApplicationRecord
   end
 
   def find_or_create_access_token
-    Doorkeeper::AccessToken.find_or_create_for(
-      Doorkeeper::Application.find_by(superapp: true),
-      session_activation.user_id,
-      Doorkeeper::OAuth::Scopes.from_string('read write follow push'),
-      Doorkeeper.configuration.access_token_expires_in,
-      Doorkeeper.configuration.refresh_token_enabled?
-    )
+    ActiveRecord::Base.connected_to(role: :writing) do
+      Doorkeeper::AccessToken.find_or_create_for(
+        Doorkeeper::Application.find_by(superapp: true),
+        session_activation.user_id,
+        Doorkeeper::OAuth::Scopes.from_string('read write follow push'),
+        Doorkeeper.configuration.access_token_expires_in,
+        Doorkeeper.configuration.refresh_token_enabled?
+      )
+    end
   end
 end
