@@ -4,26 +4,18 @@ default: &default
   timeout: 5000
   encoding: unicode
   sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
+  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
 
 development:
   master:
-    adapter: postgresql
+    <<: *default
     url: <%= ENV['DB_MASTER_URL'] %>
-    pool: <%= ENV['DB_POOL'] %>
-    timeout: 5000
-    encoding: unicode
   slave1:
-    adapter: postgresql
+    <<: *default
     url: <%= ENV['DB_SLAVE1_URL'] %>
-    pool: <%= ENV['DB_POOL'] %>
-    timeout: 5000
-    encoding: unicode
   slave2:
-    adapter: postgresql
+    <<: *default
     url: <%= ENV['DB_SLAVE2_URL'] %>
-    pool: <%= ENV['DB_POOL'] %>
-    timeout: 5000
-    encoding: unicode
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -46,27 +38,11 @@ test:
 #  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
 production:
   master:
-    adapter: postgresql
-    sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
-    prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
+    <<: *default
     url: <%= ENV['DB_MASTER_URL'] %>
-    pool: <%= ENV['DB_POOL'] %>
-    timeout: 5000
-    encoding: unicode
   slave1:
-    adapter: postgresql
-    sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
-    prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
+    <<: *default
     url: <%= ENV['DB_SLAVE1_URL'] %>
-    pool: <%= ENV['DB_POOL'] %>
-    timeout: 5000
-    encoding: unicode
   slave2:
-    adapter: postgresql
-    sslmode: <%= ENV['DB_SSLMODE'] || "prefer" %>
-    prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
+    <<: *default
     url: <%= ENV['DB_SLAVE1_URL'] %>
-    pool: <%= ENV['DB_POOL'] %>
-    timeout: 5000
-    encoding: unicode
-
