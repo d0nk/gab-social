@@ -9,9 +9,6 @@ class Oauth::AuthorizationsController < Doorkeeper::AuthorizationsController
 
   include Localized
 
-  include ForceDbWriterRole
-  around_action :force_writer_db_role, only: [:store_current_location, :render_success]
-
   private
 
   def store_current_location
@@ -20,7 +17,9 @@ class Oauth::AuthorizationsController < Doorkeeper::AuthorizationsController
 
   def render_success
     if skip_authorization? || (matching_token? && !truthy_param?('force_login'))
-      redirect_or_render authorize_response
+      ActiveRecord::Base.connected_to(role: :writing) do
+        redirect_or_render authorize_response
+      end
     elsif Doorkeeper.configuration.api_only
       render json: pre_auth
     else
