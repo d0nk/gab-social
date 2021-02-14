@@ -213,12 +213,14 @@ class User < ApplicationRecord
 
   def token_for_app(a)
     return nil if a.nil? || a.owner != self
-    Doorkeeper::AccessToken
-      .find_or_create_by(application_id: a.id, resource_owner_id: id) do |t|
+    ActiveRecord::Base.connected_to(role: :writing) do
+      Doorkeeper::AccessToken
+        .find_or_create_by(application_id: a.id, resource_owner_id: id) do |t|
 
-      t.scopes = a.scopes
-      t.expires_in = Doorkeeper.configuration.access_token_expires_in
-      t.use_refresh_token = Doorkeeper.configuration.refresh_token_enabled?
+        t.scopes = a.scopes
+        t.expires_in = Doorkeeper.configuration.access_token_expires_in
+        t.use_refresh_token = Doorkeeper.configuration.refresh_token_enabled?
+      end
     end
   end
 
