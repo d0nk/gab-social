@@ -13,9 +13,11 @@ development:
   slave1:
     <<: *default
     url: <%= ENV['DB_SLAVE1_URL'] %>
+    replica: true
   slave2:
     <<: *default
     url: <%= ENV['DB_SLAVE2_URL'] %>
+    replica: true
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -43,6 +45,8 @@ production:
   slave1:
     <<: *default
     url: <%= ENV['DB_SLAVE1_URL'] %>
+    replica: true
   slave2:
     <<: *default
     url: <%= ENV['DB_SLAVE1_URL'] %>
+    replica: true
