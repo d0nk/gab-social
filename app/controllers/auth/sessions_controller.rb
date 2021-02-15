@@ -12,17 +12,21 @@ class Auth::SessionsController < Devise::SessionsController
   before_action :set_body_classes
 
   def new
-    Devise.omniauth_configs.each do |provider, config|
-      return redirect_to(omniauth_authorize_path(resource_name, provider)) if config.strategy.redirect_at_sign_in
-    end
+    ActiveRecord::Base.connected_to(role: :writing) do
+      Devise.omniauth_configs.each do |provider, config|
+        return redirect_to(omniauth_authorize_path(resource_name, provider)) if config.strategy.redirect_at_sign_in
+      end
 
-    super
+      super
+    end
   end
 
   def create
-    super do |resource|
-      remember_me(resource)
-      flash.delete(:notice)
+    ActiveRecord::Base.connected_to(role: :writing) do
+      super do |resource|
+        remember_me(resource)
+        flash.delete(:notice)
+      end
     end
   end
 
@@ -36,13 +40,15 @@ class Auth::SessionsController < Devise::SessionsController
   protected
 
   def find_user
-    if session[:otp_user_id]
-      User.find(session[:otp_user_id])
-    elsif user_params[:email]
-      if use_seamless_external_login? && Devise.check_at_sign && user_params[:email].index('@').nil?
-        User.joins(:account).find_by(accounts: { username: user_params[:email] })
-      else
-        User.find_for_authentication(email: user_params[:email])
+    ActiveRecord::Base.connected_to(role: :writing) do
+      if session[:otp_user_id]
+        User.find(session[:otp_user_id])
+      elsif user_params[:email]
+        if use_seamless_external_login? && Devise.check_at_sign && user_params[:email].index('@').nil?
+          User.joins(:account).find_by(accounts: { username: user_params[:email] })
+        else
+          User.find_for_authentication(email: user_params[:email])
+        end
       end
     end
   end
@@ -74,30 +80,36 @@ class Auth::SessionsController < Devise::SessionsController
   end
 
   def valid_otp_attempt?(user)
-    user.validate_and_consume_otp!(user_params[:otp_attempt]) ||
-      user.invalidate_otp_backup_code!(user_params[:otp_attempt])
+    ActiveRecord::Base.connected_to(role: :writing) do
+      user.validate_and_consume_otp!(user_params[:otp_attempt]) ||
+        user.invalidate_otp_backup_code!(user_params[:otp_attempt])
+    end
   rescue OpenSSL::Cipher::CipherError => _error
     false
   end
 
   def authenticate_with_two_factor
-    user = self.resource = find_user
+    ActiveRecord::Base.connected_to(role: :writing) do
+      user = self.resource = find_user
 
-    if user_params[:otp_attempt].present? && session[:otp_user_id]
-      authenticate_with_two_factor_via_otp(user)
-    elsif user&.valid_password?(user_params[:password])
-      prompt_for_two_factor(user)
+      if user_params[:otp_attempt].present? && session[:otp_user_id]
+        authenticate_with_two_factor_via_otp(user)
+      elsif user&.valid_password?(user_params[:password])
+        prompt_for_two_factor(user)
+      end
     end
   end
 
   def authenticate_with_two_factor_via_otp(user)
-    if valid_otp_attempt?(user)
-      session.delete(:otp_user_id)
-      remember_me(user)
-      sign_in(user)
-    else
-      flash.now[:alert] = I18n.t('users.invalid_otp_token')
-      prompt_for_two_factor(user)
+    ActiveRecord::Base.connected_to(role: :writing) do
+      if valid_otp_attempt?(user)
+        session.delete(:otp_user_id)
+        remember_me(user)
+        sign_in(user)
+      else
+        flash.now[:alert] = I18n.t('users.invalid_otp_token')
+        prompt_for_two_factor(user)
+      end
     end
   end
 
