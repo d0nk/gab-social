@@ -61,7 +61,10 @@ class SessionActivation < ApplicationRecord
 
     def deactivate(id)
       return unless id
-      where(session_id: id).destroy_all
+      ActiveRecord::Base.connected_to(role: :writing) do
+        conn = ActiveRecord::Base.connection
+        conn.exec_query "delete from session_activations where session_id = '#{id}'"
+      end
     end
 
     def purge_old
