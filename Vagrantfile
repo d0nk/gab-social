@@ -48,8 +48,8 @@ sudo apt-get install \
   libpam0g-dev \
   -y
 
-# Start Redis Server
-sudo service redis-server start
+# Start Redis Server on boot (and right now)
+sudo systemctl enable --now redis-server
 
 # Install rvm
 read RUBY_VERSION < .ruby-version

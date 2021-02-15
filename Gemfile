@@ -111,7 +111,6 @@ end
 group :test do
   gem 'capybara', '~> 3.22'
   gem 'climate_control', '~> 0.2'
-  gem 'faker', '~> 1.9'
   gem 'microformats', '~> 4.1'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rspec-sidekiq', '~> 3.0'
@@ -126,6 +125,7 @@ group :development do
   gem 'better_errors', '~> 2.5'
   gem 'binding_of_caller', '~> 0.7'
   gem 'bullet', '~> 6.0'
+  gem 'faker', '~> 2.15'
   gem 'listen'
   gem 'letter_opener', '~> 1.7'
   gem 'letter_opener_web', '~> 1.3'
@@ -141,6 +141,7 @@ group :development do
   gem 'capistrano-yarn', '~> 2.0'
 
   gem 'derailed_benchmarks'
+  gem 'rack-mini-profiler'
   gem 'stackprof'
 end
 
