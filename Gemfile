@@ -30,7 +30,9 @@ gem 'charlock_holmes', '~> 0.7.6'
 gem 'iso-639'
 gem 'chewy', '~> 5.0'
 gem 'cld3', '~> 3.2.4'
-gem 'devise', '~> 4.6'
+git 'https://github.com/freespeech4ever/devise.git', branch: 'gab2' do
+  gem 'devise'
+end
 gem 'devise-two-factor', '~> 3.0'
 
 group :pam_authentication, optional: true do

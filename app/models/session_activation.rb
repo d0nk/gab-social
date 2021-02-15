@@ -23,11 +23,6 @@ class SessionActivation < ApplicationRecord
            to: :access_token,
            allow_nil: true
 
-  connects_to database: {
-    writing: :master,
-    reading: :master
-  }
-
   def detection
     @detection ||= Browser.new(user_agent)
   end
@@ -45,7 +40,9 @@ class SessionActivation < ApplicationRecord
 
   class << self
     def active?(id)
-      id && where(session_id: id).exists?
+      ActiveRecord::Base.connected_to(role: :writing) do
+        id && where(session_id: id).exists?
+      end
     end
 
     def activate(**options)
@@ -61,19 +58,16 @@ class SessionActivation < ApplicationRecord
 
     def deactivate(id)
       return unless id
-      ActiveRecord::Base.connected_to(role: :writing) do
-        conn = ActiveRecord::Base.connection
-        conn.exec_query "delete from session_activations where session_id = '#{id}'"
-      end
+      where(session_id: id).destroy_all
     end
 
     def purge_old
       order('created_at desc').offset(Rails.configuration.x.max_session_activations).destroy_all
     end
 
-    def exclusive(id)
-      where('session_id != ?', id).destroy_all
-    end
+    #def exclusive(id)
+    #  where('session_id != ?', id).destroy_all
+    #end
   end
 
   private
@@ -93,6 +87,5 @@ class SessionActivation < ApplicationRecord
                                                           expires_in: Doorkeeper.configuration.access_token_expires_in,
                                                           use_refresh_token: Doorkeeper.configuration.refresh_token_enabled?)
     end
-    self.access_token
   end
 end

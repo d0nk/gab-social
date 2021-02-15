@@ -15,8 +15,8 @@
 class AccountVerificationRequest < ApplicationRecord
 
 	connects_to database: {
-		writing: :master,
-		reading: :master
+		writing: :primary,
+		reading: :primary
 	}
 
 	LIMIT            = 4.megabytes

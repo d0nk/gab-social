@@ -15,11 +15,6 @@ class AccountModerationNote < ApplicationRecord
   belongs_to :account
   belongs_to :target_account, class_name: 'Account'
 
-  connects_to database: {
-    writing: :master,
-    reading: :master
-  }
-
   scope :latest, -> { reorder('created_at DESC') }
 
   validates :content, presence: true, length: { maximum: 500 }

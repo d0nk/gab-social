@@ -76,6 +76,14 @@ module Devise
 end
 
 Devise.setup do |config|
+
+  config.warden_hook_save_wrapper = Proc.new do |hook|
+    # ensure the writable connection is used to avoid read-only write errors
+    ApplicationRecord.connected_to(role: :writing) do
+      hook.call
+    end
+  end
+
   config.warden do |manager|
     manager.default_strategies(scope: :user).unshift :ldap_authenticatable if Devise.ldap_authentication
     manager.default_strategies(scope: :user).unshift :pam_authenticatable  if Devise.pam_authentication
