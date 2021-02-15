@@ -2,7 +2,7 @@
 
 class ApplicationRecord < ActiveRecord::Base
   connects_to database: {
-    writing: :master,
+    writing: :primary,
     reading: :slave1
   }
   self.abstract_class = true

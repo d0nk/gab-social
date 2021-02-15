@@ -19,9 +19,4 @@ class ReportNote < ApplicationRecord
 
   validates :content, presence: true, length: { maximum: 500 }
 
-  connects_to database: {
-    writing: :master,
-    reading: :master
-  }
-
 end

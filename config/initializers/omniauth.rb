@@ -7,6 +7,13 @@ Devise.setup do |config|
   options = {}
   options[:redirect_at_sign_in] = ENV['OAUTH_REDIRECT_AT_SIGN_IN'] == 'true'
 
+  config.warden_hook_save_wrapper = Proc.new do |hook|
+    # ensure the writable connection is used to avoid read-only write errors
+    ApplicationRecord.connected_to(role: :writing) do
+      hook.call
+    end
+  end
+  
   # CAS strategy
   if ENV['CAS_ENABLED'] == 'true'
     cas_options = options

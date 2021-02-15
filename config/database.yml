@@ -7,7 +7,7 @@ default: &default
   prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'false' %>
 
 development:
-  master:
+  primary:
     <<: *default
     url: <%= ENV['DB_MASTER_URL'] %>
   slave1:
@@ -39,7 +39,7 @@ test:
 #  port: <%= ENV['DB_PORT'] || 5432 %>
 #  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>
 production:
-  master:
+  primary:
     <<: *default
     url: <%= ENV['DB_MASTER_URL'] %>
   slave1:

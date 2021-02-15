@@ -29,11 +29,6 @@ class Report < ApplicationRecord
 
   validates :comment, length: { maximum: 1000 }
 
-  connects_to database: {
-    writing: :master,
-    reading: :master
-  }
-
   def local?
     false # Force uri_for to use uri attribute
   end
