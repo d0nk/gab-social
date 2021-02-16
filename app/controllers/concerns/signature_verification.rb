@@ -4,6 +4,4 @@
 # <https://tools.ietf.org/html/draft-cavage-http-signatures-06>
 module SignatureVerification
   extend ActiveSupport::Concern
-  return
-
 end
