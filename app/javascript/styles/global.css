@@ -1110,6 +1110,10 @@ pre {
   fill: var(--color_primary);
 }
 
+.fillSecondary {
+  fill: var(--text_color_secondary);
+}
+
 .fillWhite {
   fill: var(--color_white);
 }
