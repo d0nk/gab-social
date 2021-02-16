@@ -123,13 +123,15 @@ class User < ApplicationRecord
   end
 
   def confirm
-    new_user = !confirmed?
-    self.approved = true if open_registrations?
+    ActiveRecord::Base.connected_to(role: :writing) do
+      new_user = !confirmed?
+      self.approved = true if open_registrations?
 
-    super
+      super
 
-    if new_user && approved?
-      # prepare_new_user!
+      if new_user && approved?
+        # prepare_new_user!
+      end
     end
   end
 
