@@ -520,15 +520,5 @@ module GabSocial
 
     private
 
-    def rotate_keys_for_account(account, delay = 0)
-      if account.nil?
-        say('No such account', :red)
-        exit(1)
-      end
-
-      old_key = account.private_key
-      new_key = OpenSSL::PKey::RSA.new(2048)
-      account.update(private_key: new_key.to_pem, public_key: new_key.public_key.to_pem)
-    end
   end
 end

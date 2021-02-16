@@ -10,9 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_23_050026) do
+ActiveRecord::Schema.define(version: 2021_02_16_022902) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "mongo_fdw"
+  enable_extension "pg_stat_statements"
+  enable_extension "pgstattuple"
   enable_extension "plpgsql"
 
   create_table "account_conversations", force: :cascade do |t|
@@ -24,7 +27,6 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.integer "lock_version", default: 0, null: false
     t.boolean "unread", default: false, null: false
     t.index ["account_id", "conversation_id", "participant_account_ids"], name: "index_unique_conversations", unique: true
-    t.index ["account_id"], name: "index_account_conversations_on_account_id"
     t.index ["conversation_id"], name: "index_account_conversations_on_conversation_id"
   end
 
@@ -99,8 +101,6 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "username", default: "", null: false
     t.string "domain"
     t.string "secret", default: "", null: false
-    t.text "private_key"
-    t.text "public_key", default: "", null: false
     t.string "remote_url", default: "", null: false
     t.string "salmon_url", default: "", null: false
     t.string "hub_url", default: "", null: false
@@ -112,11 +112,11 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "url"
     t.string "avatar_file_name"
     t.string "avatar_content_type"
-    t.bigint "avatar_file_size"
+    t.integer "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.string "header_file_name"
     t.string "header_content_type"
-    t.bigint "header_file_size"
+    t.integer "header_file_size"
     t.datetime "header_updated_at"
     t.string "avatar_remote_url"
     t.datetime "subscription_expires_at"
@@ -135,10 +135,10 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "actor_type"
     t.boolean "discoverable"
     t.string "also_known_as", array: true
-    t.boolean "is_pro", default: false, null: false
-    t.datetime "pro_expires_at"
     t.datetime "silenced_at"
     t.datetime "suspended_at"
+    t.boolean "is_pro", default: false, null: false
+    t.datetime "pro_expires_at"
     t.boolean "is_verified", default: false, null: false
     t.boolean "is_donor", default: false, null: false
     t.boolean "is_investor", default: false, null: false
@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.bigint "user_id"
     t.string "dump_file_name"
     t.string "dump_content_type"
-    t.bigint "dump_file_size"
+    t.integer "dump_file_size"
     t.datetime "dump_updated_at"
     t.boolean "processed", default: false, null: false
     t.datetime "created_at", null: false
@@ -257,7 +257,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "domain"
     t.string "image_file_name"
     t.string "image_content_type"
-    t.bigint "image_file_size"
+    t.integer "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -325,9 +325,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "group_id"], name: "index_group_accounts_on_account_id_and_group_id", unique: true
-    t.index ["account_id"], name: "index_group_accounts_on_account_id"
     t.index ["group_id", "account_id"], name: "index_group_accounts_on_group_id_and_account_id"
-    t.index ["group_id"], name: "index_group_accounts_on_group_id"
   end
 
   create_table "group_categories", force: :cascade do |t|
@@ -342,7 +340,6 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "group_id"], name: "index_group_join_requests_on_account_id_and_group_id", unique: true
-    t.index ["account_id"], name: "index_group_join_requests_on_account_id"
     t.index ["group_id"], name: "index_group_join_requests_on_group_id"
   end
 
@@ -351,7 +348,6 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.bigint "group_id", null: false
     t.index ["group_id"], name: "index_group_pinned_statuses_on_group_id"
     t.index ["status_id", "group_id"], name: "index_group_pinned_statuses_on_status_id_and_group_id", unique: true
-    t.index ["status_id"], name: "index_group_pinned_statuses_on_status_id"
   end
 
   create_table "group_removed_accounts", force: :cascade do |t|
@@ -360,9 +356,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "group_id"], name: "index_group_removed_accounts_on_account_id_and_group_id", unique: true
-    t.index ["account_id"], name: "index_group_removed_accounts_on_account_id"
     t.index ["group_id", "account_id"], name: "index_group_removed_accounts_on_group_id_and_account_id"
-    t.index ["group_id"], name: "index_group_removed_accounts_on_group_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -371,7 +365,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "description", null: false
     t.string "cover_image_file_name"
     t.string "cover_image_content_type"
-    t.bigint "cover_image_file_size"
+    t.integer "cover_image_file_size"
     t.datetime "cover_image_updated_at"
     t.boolean "is_nsfw", default: false, null: false
     t.boolean "is_featured", default: false, null: false
@@ -438,7 +432,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.bigint "status_id"
     t.string "file_file_name"
     t.string "file_content_type"
-    t.bigint "file_file_size"
+    t.integer "file_file_size"
     t.datetime "file_updated_at"
     t.string "remote_url", default: "", null: false
     t.datetime "created_at", null: false
@@ -570,6 +564,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.datetime "updated_at", null: false
     t.integer "lock_version", default: 0, null: false
     t.index ["account_id"], name: "index_polls_on_account_id"
+    t.index ["created_at"], name: "index_polls_on_created_at"
     t.index ["id", "lock_version"], name: "index_polls_on_id_and_lock_version"
     t.index ["status_id"], name: "index_polls_on_status_id"
   end
@@ -580,7 +575,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "description", default: "", null: false
     t.string "image_file_name"
     t.string "image_content_type"
-    t.bigint "image_file_size"
+    t.integer "image_file_size"
     t.datetime "image_updated_at"
     t.integer "type", default: 0, null: false
     t.text "html", default: "", null: false
@@ -676,14 +671,13 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.bigint "shortcut_id", null: false
     t.string "shortcut_type", default: "", null: false
     t.index ["account_id", "shortcut_id", "shortcut_type"], name: "index_shortcuts_on_account_id_and_shortcut_id_and_shortcut_type", unique: true
-    t.index ["account_id"], name: "index_shortcuts_on_account_id"
   end
 
   create_table "site_uploads", force: :cascade do |t|
     t.string "var", default: "", null: false
     t.string "file_file_name"
     t.string "file_content_type"
-    t.bigint "file_file_size"
+    t.integer "file_file_size"
     t.datetime "file_updated_at"
     t.json "meta"
     t.datetime "created_at", null: false
@@ -705,7 +699,6 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.bigint "status_id", null: false
     t.bigint "status_bookmark_collection_id"
     t.index ["account_id", "status_id"], name: "index_status_bookmarks_on_account_id_and_status_id", unique: true
-    t.index ["account_id"], name: "index_status_bookmarks_on_account_id"
     t.index ["status_bookmark_collection_id"], name: "index_status_bookmarks_on_status_bookmark_collection_id"
     t.index ["status_id"], name: "index_status_bookmarks_on_status_id"
   end
@@ -766,6 +759,7 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.text "markdown"
     t.datetime "expires_at"
     t.boolean "has_quote"
+    t.index ["account_id", "id", "visibility", "created_at"], name: "index_statuses_20201206", order: { id: :desc }
     t.index ["account_id", "id", "visibility", "updated_at"], name: "index_statuses_20180106", order: { id: :desc }
     t.index ["created_at"], name: "index_statuses_on_created_at"
     t.index ["group_id"], name: "index_statuses_on_group_id"
