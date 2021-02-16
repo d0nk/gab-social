@@ -30,7 +30,7 @@ export default getState => {
 
   return axios.create({
     headers: Object.assign(csrfHeader, authToken ? {
-      'Authorization': `Bearer ${authToken}}`,
+      'Authorization': `Bearer ${authToken}`,
     } : {}),
 
     transformResponse: [function (data) {
