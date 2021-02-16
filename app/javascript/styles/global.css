@@ -1137,6 +1137,10 @@ pre {
   color: var(--navigation_brand);
 }
 
+.strokeBrand { stroke: var(--color_brand); }
+.strokeSecondary { stroke: var(--solid_color_secondary); }
+.strokeError { stroke: var(--color_red); }
+
 .navigationUnderlineActive:after {
   content: '';
   display: block;

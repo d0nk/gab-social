@@ -12,11 +12,12 @@ class CharacterCounter extends React.PureComponent {
   render() {
     const { text, max } = this.props
 
-    const actualRadius = 16
-    const radius = 12
+    const actualRadius = 10
+    const radius = 8
     const circumference = 2 * Math.PI * radius
     const diff = Math.min(length(text), max) / max
     const dashoffset = circumference * (1 - diff)
+    const circleClass = length(text) > max ? _s.strokeError : _s.strokeBrand
 
     return (
       <div className={[_s.d, _s.mr10, _s.jcCenter, _s.aiCenter].join(' ')}>
@@ -31,8 +32,8 @@ class CharacterCounter extends React.PureComponent {
             cy={actualRadius}
             r={radius}
             fill='none'
-            stroke='#e6e6e6'
             strokeWidth='2'
+            className={_s.strokeSecondary}
           />
           <circle
             style={{
@@ -43,9 +44,9 @@ class CharacterCounter extends React.PureComponent {
             cx={actualRadius}
             cy={actualRadius}
             r={radius}
-            strokeWidth='2'
+            strokeWidth='2.25'
             strokeLinecap='round'
-            stroke='#21cf7a'
+            className={circleClass}
           />
         </svg>
       </div>
