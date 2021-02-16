@@ -10,7 +10,11 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :set_body_classes, only: [:new, :create, :edit, :update]
   before_action :set_cache_headers, only: [:edit, :update]
   prepend_before_action :check_if_password_email_identical, only: [:create]
-  prepend_before_action :check_captcha, only: [:create]
+  if ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '').empty? || ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '').nil?
+    # captcha disabled if key not defined
+  else
+    prepend_before_action :check_captcha, only: [:create]
+  end
 
   def new
     set_challenge_buster

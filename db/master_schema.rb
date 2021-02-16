@@ -101,8 +101,6 @@ ActiveRecord::Schema.define(version: 2021_01_23_050026) do
     t.string "username", default: "", null: false
     t.string "domain"
     t.string "secret", default: "", null: false
-    t.text "private_key"
-    t.text "public_key", default: "", null: false
     t.string "remote_url", default: "", null: false
     t.string "salmon_url", default: "", null: false
     t.string "hub_url", default: "", null: false
