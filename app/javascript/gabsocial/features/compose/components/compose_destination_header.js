@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes'
 import {
   CX,
   MODAL_COMPOSE,
+  MAX_POST_CHARACTER_COUNT,
   POPOVER_COMPOSE_POST_DESTINATION,
 } from '../../../constants'
 import { openModal } from '../../../actions/modal'
@@ -14,6 +15,7 @@ import Avatar from '../../../components/avatar'
 import Button from '../../../components/button'
 import Icon from '../../../components/icon'
 import Text from '../../../components/text'
+import CharacterCounter from '../../../components/character_counter'
 
 class ComposeDestinationHeader extends ImmutablePureComponent {
 
@@ -38,6 +40,7 @@ class ComposeDestinationHeader extends ImmutablePureComponent {
       composeGroup,
       composeGroupId,
       formLocation,
+      text,
     } = this.props
 
     const isIntroduction = formLocation === 'introduction'
@@ -86,6 +89,10 @@ class ComposeDestinationHeader extends ImmutablePureComponent {
           }
         </div>
         {
+          !!text &&
+          <CharacterCounter max={MAX_POST_CHARACTER_COUNT} text={text} />
+        }
+        {
           !isModal && !isIntroduction &&
           <Button
             isText
@@ -94,6 +101,7 @@ class ComposeDestinationHeader extends ImmutablePureComponent {
             color='tertiary'
             icon='fullscreen'
             onClick={this.handleOnExpand}
+            className={_s.ml10}
           />
         }
       </div>
@@ -106,6 +114,7 @@ const mapStateToProps = (state) => {
 
   return {
     composeGroupId,
+    text: state.getIn(['compose', 'text']),
     isReply: !!state.getIn(['compose', 'in_reply_to']),
     isEdit: state.getIn(['compose', 'id']) !== null,
     composeGroup: state.getIn(['groups', composeGroupId]),

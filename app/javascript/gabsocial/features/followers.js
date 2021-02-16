@@ -54,7 +54,6 @@ class Followers extends ImmutablePureComponent {
           scrollKey='followers'
           hasMore={hasMore}
           isLoading={isLoading}
-          showLoading={isLoading}
           onLoadMore={this.handleLoadMore}
           placeholderComponent={AccountPlaceholder}
           placeholderCount={4}

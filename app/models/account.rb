@@ -7,8 +7,6 @@
 #  username                :string           default(""), not null
 #  domain                  :string
 #  secret                  :string           default(""), not null
-#  private_key             :text
-#  public_key              :text             default(""), not null
 #  remote_url              :string           default(""), not null
 #  salmon_url              :string           default(""), not null
 #  hub_url                 :string           default(""), not null
@@ -54,6 +52,8 @@
 #
 
 class Account < ApplicationRecord
+  self.ignored_columns = ["private_key"]
+  self.ignored_columns = ["public_key"]
   USERNAME_RE = /[a-z0-9_]+([a-z0-9_\.-]+[a-z0-9_]+)?/i
   MENTION_RE  = /(?<=^|[^\/[:word:]])@((#{USERNAME_RE})(?:@[a-z0-9\.\-]+[a-z0-9]+)?)/i
   MIN_FOLLOWERS_DISCOVERY = 10
@@ -200,10 +200,6 @@ class Account < ApplicationRecord
     end
   end
 
-  def keypair
-    @keypair ||= OpenSSL::PKey::RSA.new(private_key || public_key)
-  end
-
   def tags_as_strings=(tag_names)
     tag_names.map! { |name| name.mb_chars.downcase.to_s }
     tag_names.uniq!
@@ -277,21 +273,6 @@ class Account < ApplicationRecord
     end
 
     self.fields = tmp
-  end
-
-  def magic_key
-    modulus, exponent = [keypair.public_key.n, keypair.public_key.e].map do |component|
-      result = []
-
-      until component.zero?
-        result << [component % 256].pack('C')
-        component >>= 8
-      end
-
-      result.reverse.join
-    end
-
-    (['RSA'] + [modulus, exponent].map { |n| Base64.urlsafe_encode64(n) }).join('.')
   end
 
   def save_with_optional_media!
@@ -444,7 +425,6 @@ class Account < ApplicationRecord
     @emojis ||= CustomEmoji.from_text(emojifiable_text)
   end
 
-  before_create :generate_keys
   before_validation :prepare_contents, if: :local?
   before_validation :prepare_username, on: :create
   before_destroy :clean_feed_manager
@@ -458,14 +438,6 @@ class Account < ApplicationRecord
 
   def prepare_username
     username&.squish!
-  end
-
-  def generate_keys
-    return unless local? && !Rails.env.test?
-
-    keypair = OpenSSL::PKey::RSA.new(2048)
-    self.private_key = keypair.to_pem
-    self.public_key  = keypair.public_key.to_pem
   end
 
   def normalize_domain

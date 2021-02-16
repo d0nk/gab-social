@@ -18,7 +18,7 @@
 #  member_count             :integer          default(0)
 #  slug                     :text
 #  is_private               :boolean          default(FALSE)
-#  is_visible               :boolean          default(FALSE)
+#  is_visible               :boolean          default(TRUE)
 #  tags                     :string           default([]), is an Array
 #  password                 :string
 #  group_category_id        :integer
