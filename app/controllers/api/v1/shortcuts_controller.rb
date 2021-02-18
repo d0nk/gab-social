@@ -6,7 +6,7 @@ class Api::V1::ShortcutsController < Api::BaseController
 
   def index
     @shortcuts = Shortcut.where(account: current_account).limit(100)
-    
+
     @onlyGroupIds = @shortcuts.select{ |s| s.shortcut_type == 'group' }.map(&:shortcut_id)
     @onlyAccountIds = @shortcuts.select{ |s| s.shortcut_type == 'account' }.map(&:shortcut_id)
 
@@ -29,7 +29,9 @@ class Api::V1::ShortcutsController < Api::BaseController
       elsif s.shortcut_type == 'account'
         @account = @accounts.detect{ |a| a.id == s.shortcut_id }
         if @account.nil?
-          s.destroy!
+          ActiveRecord::Base.connected_to(role: :writing) do
+            s.destroy!
+          end
         else
           value = REST::AccountSerializer.new(@account)
         end
@@ -73,7 +75,7 @@ class Api::V1::ShortcutsController < Api::BaseController
     }
 
     render json: r
-    
+
   rescue ActiveRecord::RecordNotUnique
     render json: { error: I18n.t('shortcuts.errors.exists') }, status: 422
   end
