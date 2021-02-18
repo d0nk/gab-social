@@ -53,7 +53,7 @@ module JsonLdHelper
     needle   = Addressable::URI.parse(url).host
     haystack = Addressable::URI.parse(@account.uri).host
 
-    !haystack.casecmp(needle).zero?
+    !haystack.casecmp?(needle)
   end
 
   def canonicalize(json)
