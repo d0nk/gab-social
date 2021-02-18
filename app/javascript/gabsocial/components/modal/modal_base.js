@@ -23,10 +23,10 @@ class ModalBase extends React.PureComponent {
     }
   }
 
-  handleOnClose = (e) => {
+  handleOnClose = (e, force) => {
     const { onOpenModal, composeText, composeId, onClose, intl, type, onCancelReplyCompose } = this.props
 
-    if (!!e && this.dialog !== e.target) return
+    if ((!!e && this.dialog !== e.target) && !force) return
 
     if (!composeId && composeText && type === 'COMPOSE') {
       onOpenModal('CONFIRM', {
@@ -42,6 +42,7 @@ class ModalBase extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('keyup', this.handleKeyUp, false)
+    window.addEventListener('popstate', (e) => this.handleOnClose(e, true), false);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -73,6 +74,7 @@ class ModalBase extends React.PureComponent {
 
   componentWillUnmount() {
     window.removeEventListener('keyup', this.handleKeyUp)
+    window.removeEventListener('popstate', this.handleOnClose, false);
   }
 
   getSiblings = () => {

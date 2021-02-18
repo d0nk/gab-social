@@ -19,12 +19,14 @@ class PopoverBase extends ImmutablePureComponent {
     document.addEventListener('click', this.handleDocumentClick, false)
     document.addEventListener('keydown', this.handleKeyDown, false)
     document.addEventListener('touchend', this.handleDocumentClick, listenerOptions)
+    window.addEventListener('popstate', this.handleClose, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleDocumentClick, false)
     document.removeEventListener('keydown', this.handleKeyDown, false)
     document.removeEventListener('touchend', this.handleDocumentClick, listenerOptions)
+    window.removeEventListener('hashchange', this.handleClose);
   }
 
   handleDocumentClick = (e) => {
