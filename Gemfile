@@ -145,6 +145,7 @@ group :development do
   gem 'derailed_benchmarks'
   gem 'rack-mini-profiler'
   gem 'stackprof'
+  gem 'benchmark-ips'
 end
 
 group :production do

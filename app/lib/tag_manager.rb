@@ -7,11 +7,11 @@ class TagManager
   include RoutingHelper
 
   def web_domain?(domain)
-    domain.nil? || domain.gsub(/[\/]/, '').casecmp(Rails.configuration.x.web_domain).zero?
+    domain.nil? || domain.gsub(/[\/]/, '').casecmp?(Rails.configuration.x.web_domain)
   end
 
   def local_domain?(domain)
-    domain.nil? || domain.gsub(/[\/]/, '').casecmp(Rails.configuration.x.local_domain).zero?
+    domain.nil? || domain.gsub(/[\/]/, '').casecmp?(Rails.configuration.x.local_domain)
   end
 
   def normalize_domain(domain)
@@ -35,9 +35,9 @@ class TagManager
   end
 
   def same_acct?(canonical, needle)
-    return true if canonical.casecmp(needle).zero?
+    return true if canonical.casecmp?(needle)
     username, domain = needle.split('@')
-    local_domain?(domain) && canonical.casecmp(username).zero?
+    local_domain?(domain) && canonical.casecmp?(username)
   end
 
   def local_url?(url)

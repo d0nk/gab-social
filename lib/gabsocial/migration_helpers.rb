@@ -44,13 +44,13 @@ module GabSocial
     # Stub for Database.postgresql? from GitLab
     def self.postgresql?
       %w[postgresql postgresql_makara].any? do |adapter|
-        ActiveRecord::Base.configurations[Rails.env]['adapter'].casecmp(adapter).zero?
+        ActiveRecord::Base.configurations[Rails.env]['adapter'].casecmp?(adapter)
       end
     end
 
     # Stub for Database.mysql? from GitLab
     def self.mysql?
-      ActiveRecord::Base.configurations[Rails.env]['adapter'].casecmp('mysql2').zero?
+      ActiveRecord::Base.configurations[Rails.env]['adapter'].casecmp?('mysql2')
     end
 
     # Model that can be used for querying permissions of a SQL user.
