@@ -325,6 +325,11 @@ class Status extends ImmutablePureComponent {
       return null
     }
 
+    //If account is spam and not mine, hide
+    if (status.getIn(['account', 'is_flagged_as_spam']) && status.getIn(['account', 'id']) !== me) {
+      return null
+    }
+
     if (isComment && !ancestorStatus && !isChild) {
       // Wait to load...
       // return <StatusPlaceholder />

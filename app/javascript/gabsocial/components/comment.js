@@ -108,6 +108,12 @@ class Comment extends ImmutablePureComponent {
     } = this.props
 
     if (!status) return null
+
+    //If account is spam and not mine, hide
+    if (status.getIn(['account', 'is_flagged_as_spam']) && status.getIn(['account', 'id']) !== me) {
+      return null
+    }
+
     if (isHidden) {
       return (
         <div tabIndex='0' ref={this.setContainerNode}>
