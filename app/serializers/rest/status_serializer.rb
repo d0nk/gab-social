@@ -8,7 +8,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
 
   attribute :favourited, if: :current_user?
   attribute :reblogged, if: :current_user?
-  
+
   attribute :content, unless: :source_requested?
   attribute :rich_content, unless: :source_requested?
   attribute :plain_markdown, unless: :source_requested?
@@ -110,11 +110,12 @@ class REST::StatusSerializer < ActiveModel::Serializer
     return
   end
 
+  PINNABLE_VISIBILITIES = %w(public unlisted).freeze
   def pinnable
     current_user? &&
       current_user.account_id == object.account_id &&
       !object.reblog? &&
-      %w(public unlisted).include?(object.visibility)
+      PINNABLE_VISIBILITIES.include?(object.visibility)
   end
 
   def pinned_by_group
