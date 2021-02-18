@@ -27,13 +27,13 @@
         %th= t('admin.reports.reported_account')
         %td= admin_account_link_to @report.target_account
         %td= table_link_to 'flag', pluralize(@report.target_account.targeted_reports.count, t('admin.reports.account.report')), admin_reports_path(target_account_id: @report.target_account.id)
-        %td= table_link_to 'file', pluralize(@report.target_account.targeted_moderation_notes.count, t('admin.reports.account.note')), admin_reports_path(target_account_id: @report.target_account.id)
+        %td= render 'admin/accounts/account_flags_block', :account => @report.target_account
       %tr
         %th= t('admin.reports.reported_by')
         - if @report.account.local?
           %td= admin_account_link_to @report.account
           %td= table_link_to 'flag', pluralize(@report.account.targeted_reports.count, t('admin.reports.account.report')), admin_reports_path(target_account_id: @report.account.id)
-          %td= table_link_to 'file', pluralize(@report.account.targeted_moderation_notes.count, t('admin.reports.account.note')), admin_reports_path(target_account_id: @report.account.id)
+          %td= render 'admin/accounts/account_flags_block', :account => @report.account
         - else
           %td{ colspan: 3 }= @report.account.domain
       %tr

@@ -85,14 +85,16 @@
         %th Role
     %tbody
       %tr
-        %td
+        %td{style: "display:flex;flex-direction:row;align-items:center;"}
           = admin_account_link_to(@group.account)
+          %div{style:"margin-left:10px;"}= render 'admin/accounts/account_flags_block', :account => @group.account
         %td
           %span Group Creator
       - @admins.each do |acct|
         %tr
-          %td
+          %td{style: "display:flex;flex-direction:row;align-items:center;"}
             = admin_account_link_to(acct.account)
+            %div{style:"margin-left:10px;"}= render 'admin/accounts/account_flags_block', :account => acct.account
           %td
             %span Admin
       - @mods.each do |acct|
