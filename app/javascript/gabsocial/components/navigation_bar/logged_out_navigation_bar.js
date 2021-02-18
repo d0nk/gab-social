@@ -65,7 +65,7 @@ class LoggedOutNavigationBar extends React.PureComponent {
                 isNarrow
                 isOutline
                 color='brand'
-                backgroundColor='white'
+                backgroundColor='none'
                 href='/auth/sign_in'
                 className={[_s.borderColorWhite, _s.mr5, _s.flexGrow1, _s.aiCenter, _s.jcCenter, _s.py7].join(' ')}
               >
