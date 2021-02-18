@@ -123,11 +123,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   end
 
   def pinnable_by_group
-    if object.group_id?
-      true
-    else
-      false
-    end
+    object.group_id?
   end
 
   def source_requested?
