@@ -38,6 +38,8 @@ class PopoverBase extends ImmutablePureComponent {
   }
 
   handleKeyDown = (e) => {
+    if (!this.node) return
+
     const items = Array.from(this.node.getElementsByTagName('a'))
     const index = items.indexOf(document.activeElement)
     let element
