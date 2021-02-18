@@ -99,8 +99,9 @@
             %span Admin
       - @mods.each do |acct|
         %tr
-          %td
+          %td{style: "display:flex;flex-direction:row;align-items:center;"}
             = admin_account_link_to(acct.account)
+            %div{style:"margin-left:10px;"}= render 'admin/accounts/account_flags_block', :account => acct.account
           %td
             %span Moderator
 
