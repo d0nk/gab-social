@@ -4,6 +4,6 @@ class AddIsFlaggedAsSpamToAccounts < ActiveRecord::Migration[5.2]
   end
 
   def down
-    remove_column :accounts, :is_pro
+    remove_column :accounts, :is_flagged_as_spam
   end
 end
