@@ -11,7 +11,10 @@ class ActiveModel::Serializer::Reflection
   def build_association(parent_serializer, parent_serializer_options, include_slice = {})
     serializer = options[:serializer]
 
-    parent_serializer_options.merge!(named_contexts: serializer._named_contexts, context_extensions: serializer._context_extensions) if serializer.respond_to?(:_named_contexts)
+    if serializer.respond_to?(:_named_contexts)
+      parent_serializer_options[:named_contexts] = serializer._named_contexts
+      parent_serializer_options[:context_extensions] = serializer._context_extensions
+    end
 
     association_options = {
       parent_serializer: parent_serializer,
