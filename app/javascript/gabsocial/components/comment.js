@@ -107,6 +107,7 @@ class Comment extends ImmutablePureComponent {
       ancestorAccountId,
     } = this.props
 
+    if (!status) return null
     if (isHidden) {
       return (
         <div tabIndex='0' ref={this.setContainerNode}>
