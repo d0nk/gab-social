@@ -47,7 +47,8 @@ class SignUpLogInPanel extends React.PureComponent {
               <div className={[_s.d, _s.pb5].join(' ')}>
                 <Button
                   isOutline
-                  color='white'
+                  color='brand'
+                  backgroundColor='none'
                   href='/auth/sign_in'
                   className={[_s.mb10, _s.borderColorWhite].join(' ')}
                 >
@@ -56,9 +57,8 @@ class SignUpLogInPanel extends React.PureComponent {
                   </Text>
                 </Button>
                 <Button
-                  isOutline
-                  color='brand'
-                  backgroundColor='white'
+                  color='white'
+                  backgroundColor='brand'
                   href='/auth/sign_up'
                 >
                   <Text color='inherit' size='large' weight='bold' align='center'>
