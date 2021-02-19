@@ -88,7 +88,6 @@ class Account < ApplicationRecord
   validates :display_name, length: { maximum: 30 }, if: -> { local? && will_save_change_to_display_name? }
   validates :note, note_length: { maximum: 500 }, if: -> { local? && will_save_change_to_note? }
   validates :fields, length: { maximum: 6 }, if: -> { local? && will_save_change_to_fields? }
-  validates :spam_flag, inclusion: { in: SPAM_FLAG_CLASS_MAP.values }
 
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }
