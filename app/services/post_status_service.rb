@@ -34,6 +34,7 @@ class PostStatusService < BaseService
 
     return idempotency_duplicate if idempotency_given? && idempotency_duplicate?
 
+    validate_user_confirmation!
     validate_similarity!
     validate_links!
     validate_media!
@@ -158,6 +159,19 @@ class PostStatusService < BaseService
 
     hasVideoOrGif = @media.find(&:video?) || @media.find(&:gifv?)
     raise GabSocial::ValidationError, I18n.t('media_attachments.validations.images_and_video') if @media.size > 1 && hasVideoOrGif
+  end
+
+  def validate_user_confirmation!
+    return true if @account.user&.confirmed?
+    
+    has_mentions = !@text.match(Account::MENTION_RE).nil?
+    group_id = @options[:group_id]
+    is_introduce_yourself_group = group_id == "12"
+    
+    # do not allow statuses with mentions and not reply
+    raise GabSocial::NotPermittedError if has_mentions && @in_reply_to.nil?
+    # do not allow statuses with group if not group 12
+    raise GabSocial::NotPermittedError if !group_id.nil? && !is_introduce_yourself_group
   end
 
   def validate_similarity!
