@@ -572,6 +572,7 @@ en:
     reset_password: Reset password
     security: Security
     set_new_password: Set new password
+    too_fast: Form submitted too fast, try again.
     trouble_logging_in: Trouble logging in?
   authorize_follow:
     already_following: You are already following this account

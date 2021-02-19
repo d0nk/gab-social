@@ -9,6 +9,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :set_instance_presenter, only: [:new, :create, :update]
   before_action :set_body_classes, only: [:new, :create, :edit, :update]
   before_action :set_cache_headers, only: [:edit, :update]
+  prepend_before_action :check_form_submission_speed, only: [:create]
   prepend_before_action :check_if_password_email_identical, only: [:create]
   if ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '').empty? || ENV.fetch('GAB_CAPTCHA_CLIENT_KEY', '').nil?
     # captcha disabled if key not defined
@@ -67,6 +68,15 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   private
 
+  def check_form_submission_speed
+    if session[:registration_form_time] > 10.seconds.ago
+      flash[:alert] = I18n.t('auth.too_fast')
+      respond_with_navigational(resource) {
+        redirect_to new_user_registration_path
+      }
+    end
+  end
+
   def check_if_password_email_identical
     if params[:user][:email] == params[:user][:password]
       flash[:alert] = "Your email cannot be your password. Please enter a new password."
@@ -98,6 +108,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   def set_challenge_buster
     @challenge_buster = SecureRandom.hex
+    session[:registration_form_time] = Time.now.utc
   end
 
   def passed_challenge?(serverToken, userParams)
