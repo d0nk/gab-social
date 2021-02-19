@@ -69,7 +69,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   private
 
   def check_form_submission_speed
-    if session[:registration_form_time] > 10.seconds.ago
+    if session[:registration_form_time] > 5.seconds.ago
       flash[:alert] = I18n.t('auth.too_fast')
       respond_with_navigational(resource) {
         redirect_to new_user_registration_path
