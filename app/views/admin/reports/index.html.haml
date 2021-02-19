@@ -51,7 +51,7 @@
               = admin_account_link_to report.account
             - else
               = report.account.domain
-          .report-card__summary__item__content
+          .report-card__summary__item__content{style: "max-width: calc(100% - 370px)!important;"}
             = link_to admin_report_path(report) do
               .one-line= report.comment.presence || t('admin.reports.comment.none')
 
@@ -63,9 +63,6 @@
                 = fa_icon('camera')
                 = report.media_attachments.count
 
-          .report-card__summary__item__assigned
-            - if report.assigned_account.present?
-              = admin_account_link_to report.assigned_account
-            - else
-              \-
+          .report-card__summary__item__assigned{style: "width:220px;text-align:right;"}
+            %time.formatted{ datetime: report.created_at.iso8601 }
 = paginate @reports
