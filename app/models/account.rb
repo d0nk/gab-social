@@ -70,7 +70,7 @@ class Account < ApplicationRecord
   include DomainNormalizable
 
   SPAM_FLAG_CLASS_MAP = {
-    none: 0,
+    none: nil,
     spam: 1,
     safe: 2,
   }.freeze
