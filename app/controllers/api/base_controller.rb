@@ -91,8 +91,6 @@ class Api::BaseController < ApplicationController
       render json: { error: 'Your account has been flagged as spam. Please contact support@gab.com if you believe this is an error.' }, status: 403
     elsif !current_user.approved?
       render json: { error: 'Your login is currently pending approval' }, status: 403
-    else
-      set_user_activity
     end
   end
 

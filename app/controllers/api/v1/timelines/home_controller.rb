@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class Api::V1::Timelines::HomeController < Api::BaseController
+
   before_action :require_user!, only: [:show]
   after_action :insert_pagination_headers, unless: -> { @statuses.empty? }
+
+  include UserTrackingConcern
+  include SessionTrackingConcern
 
   def show
     @statuses = load_statuses
@@ -33,6 +37,8 @@ class Api::V1::Timelines::HomeController < Api::BaseController
   end
 
   def account_home_feed
+    set_user_activity
+    set_session_activity
     HomeFeed.new(current_account)
   end
 

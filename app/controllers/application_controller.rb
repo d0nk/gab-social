@@ -6,8 +6,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   include Localized
-  include UserTrackingConcern
-  include SessionTrackingConcern
 
   helper_method :current_account
   helper_method :current_session
