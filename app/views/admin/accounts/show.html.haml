@@ -138,11 +138,11 @@
           %tr
             %th Is flagged as spam
             %td
-              - if @account.is_flagged_as_spam?
+              - if @account.is_spam?
                 %span YES
               - else
                 %span no
-            - if @account.is_flagged_as_spam?
+            - if @account.is_spam?
               %td= table_link_to 'ban', 'Reset', reset_spam_admin_account_path(@account.id), method: :post
 
 

@@ -4,7 +4,7 @@ class REST::AccountSerializer < ActiveModel::Serializer
   include RoutingHelper
 
   attributes :id, :username, :acct, :display_name, :locked, :bot, :created_at,
-             :note, :url, :avatar, :avatar_static, :header, :header_static, :is_flagged_as_spam,
+             :note, :url, :avatar, :avatar_static, :header, :header_static, :is_spam,
              :followers_count, :following_count, :statuses_count, :is_pro, :is_verified, :is_donor, :is_investor
 
   has_one :moved_to_account, key: :moved, serializer: REST::AccountSerializer, if: :moved_and_not_nested?
@@ -22,6 +22,10 @@ class REST::AccountSerializer < ActiveModel::Serializer
 
   def id
     object.id.to_s
+  end
+
+  def is_spam
+    object.is_spam?
   end
 
   def note

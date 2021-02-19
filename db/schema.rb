@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_022902) do
+ActiveRecord::Schema.define(version: 2021_02_18_235403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "mongo_fdw"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 2021_02_16_022902) do
     t.boolean "is_donor", default: false, null: false
     t.boolean "is_investor", default: false, null: false
     t.boolean "is_flagged_as_spam", default: false, null: false
+    t.integer "spam_flag"
     t.index "(((setweight(to_tsvector('simple'::regconfig, (display_name)::text), 'A'::\"char\") || setweight(to_tsvector('simple'::regconfig, (username)::text), 'B'::\"char\")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(domain, ''::character varying))::text), 'C'::\"char\")))", name: "search_index", using: :gin
     t.index "lower((username)::text), lower((domain)::text)", name: "index_accounts_on_username_and_domain_lower", unique: true
     t.index ["domain"], name: "index_accounts_on_domain"

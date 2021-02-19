@@ -59,7 +59,7 @@ class AccountFilter
     when "sign_up_date_gte"
       Account.where("created_at >= ?", value)
     when "spam"
-      Account.where(is_flagged_as_spam: true)
+      Account.where(spam_flag: Account::SPAM_FLAG_CLASS_MAP[:spam])
     when "is_pro"
       Account.where(is_pro: true)
     when "is_investor"

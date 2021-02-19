@@ -326,7 +326,7 @@ class Status extends ImmutablePureComponent {
     }
 
     //If account is spam and not mine, hide
-    if (status.getIn(['account', 'is_flagged_as_spam']) && status.getIn(['account', 'id']) !== me) {
+    if (status.getIn(['account', 'is_spam']) && status.getIn(['account', 'id']) !== me) {
       return null
     }
 

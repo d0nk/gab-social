@@ -174,7 +174,7 @@ module Admin
     end
 
     def reset_spam
-      @account.is_flagged_as_spam = false
+      @account.spam_flag = Account::SPAM_FLAG_CLASS_MAP[:safe]
       @account.save!
       redirect_to admin_account_path(@account.id)
     end

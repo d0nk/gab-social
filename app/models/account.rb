@@ -49,6 +49,7 @@
 #  is_donor                :boolean          default(FALSE), not null
 #  is_investor             :boolean          default(FALSE), not null
 #  is_flagged_as_spam      :boolean          default(FALSE), not null
+#  spam_flag               :integer
 #
 
 class Account < ApplicationRecord
@@ -68,6 +69,12 @@ class Account < ApplicationRecord
   include AccountCounters
   include DomainNormalizable
 
+  SPAM_FLAG_CLASS_MAP = {
+    none: 0,
+    spam: 1,
+    safe: 2,
+  }.freeze
+
   validates :username, presence: true
 
   # Remote user validations
@@ -81,6 +88,7 @@ class Account < ApplicationRecord
   validates :display_name, length: { maximum: 30 }, if: -> { local? && will_save_change_to_display_name? }
   validates :note, note_length: { maximum: 500 }, if: -> { local? && will_save_change_to_note? }
   validates :fields, length: { maximum: 6 }, if: -> { local? && will_save_change_to_fields? }
+  validates :spam_flag, inclusion: { in: SPAM_FLAG_CLASS_MAP.values }
 
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }
@@ -121,6 +129,10 @@ class Account < ApplicationRecord
 
   def local?
     domain.nil?
+  end
+
+  def is_spam?
+    spam_flag == SPAM_FLAG_CLASS_MAP[:spam]
   end
 
   def moved?
