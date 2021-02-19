@@ -155,3 +155,4 @@ end
 gem 'concurrent-ruby', require: false
 
 gem "elastic-apm", "~> 3.13"
+gem 'similar_text', '~> 0.0.4'
