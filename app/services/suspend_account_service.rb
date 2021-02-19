@@ -51,6 +51,7 @@ class SuspendAccountService < BaseService
     purge_user!
     purge_profile!
     purge_content!
+    resolve_reports!
   end
 
   private
@@ -97,6 +98,10 @@ class SuspendAccountService < BaseService
     @account.avatar.destroy
     @account.header.destroy
     @account.save!
+  end
+
+  def resolve_reports!
+    Report.where(target_account: @account).unresolved.update_all(action_taken: true) unless @options[:destroy]
   end
 
   def destroy_all(association)
