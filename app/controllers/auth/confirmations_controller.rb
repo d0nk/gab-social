@@ -13,14 +13,7 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
 
   def finish_signup
     return unless request.patch? && params[:user]
-
-    if @user.update(user_params)
-      @user.skip_reconfirmation!
-      bypass_sign_in(@user)
-      redirect_to root_path, notice: I18n.t('devise.confirmations.send_instructions')
-    else
-      @show_errors = true
-    end
+    @user.email = current_user.unconfirmed_email || current_user.email if user_signed_in?
   end
 
   private
