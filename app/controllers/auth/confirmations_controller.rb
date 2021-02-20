@@ -4,18 +4,16 @@ class Auth::ConfirmationsController < Devise::ConfirmationsController
   layout 'auth'
 
   before_action :set_body_classes
+  before_action :require_unconfirmed!
   before_action :set_user, only: [:finish_signup]
+
+  def require_unconfirmed!
+    redirect_to edit_user_registration_path if user_signed_in? && current_user.confirmed? && current_user.unconfirmed_email.blank?
+  end
 
   def finish_signup
     return unless request.patch? && params[:user]
-
-    if @user.update(user_params)
-      @user.skip_reconfirmation!
-      bypass_sign_in(@user)
-      redirect_to root_path, notice: I18n.t('devise.confirmations.send_instructions')
-    else
-      @show_errors = true
-    end
+    @user.email = current_user.unconfirmed_email || current_user.email if user_signed_in?
   end
 
   private
