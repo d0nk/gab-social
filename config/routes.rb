@@ -304,12 +304,6 @@ Rails.application.routes.draw do
 
       get '/account_by_username/:username', to: 'account_by_username#show', username: username_regex
 
-      namespace :apps do
-        get :verify_credentials, to: 'credentials#show'
-      end
-
-      resources :apps, only: [:create]
-
       resources :follow_requests, only: [:index] do
         member do
           post :authorize
