@@ -33,7 +33,7 @@ class Api::V1::Timelines::ListController < Api::BaseController
     statuses = Status.where(
       account: @accounts, reply: false
     ).where(
-      'updated_at > ?', 10.days.ago
+      'created_at > ?', 10.days.ago
     ).paginate_by_id(
       limit_param(DEFAULT_STATUSES_LIMIT),
       params_slice(:max_id, :since_id, :min_id)
