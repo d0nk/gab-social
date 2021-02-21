@@ -103,7 +103,7 @@ class Api::BaseController < ApplicationController
   end
 
   def superapp?
-    return false if doorkeeper_token.nil?
+    return true if doorkeeper_token.nil?
     doorkeeper_token && doorkeeper_token.application.superapp? || false
   end
 
