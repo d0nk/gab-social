@@ -201,6 +201,10 @@ class User < ApplicationRecord
     settings.notification_emails['report']
   end
 
+  def allows_pro_reminder_emails?
+    settings.notification_emails['pro_reminder']
+  end
+
   def hides_network?
     @hides_network ||= settings.hide_network
   end

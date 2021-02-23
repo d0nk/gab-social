@@ -47,7 +47,7 @@ class Settings::PreferencesController < Settings::BaseController
       :setting_hide_network,
       :setting_aggregate_reblogs,
       :setting_group_in_home_feed,
-      notification_emails: %i(follow follow_request reblog favourite mention digest report emails_from_gabcom),
+      notification_emails: %i(follow follow_request reblog favourite mention digest report pro_reminder emails_from_gabcom),
       interactions: %i(must_be_follower must_be_following)
     )
   end

@@ -35,6 +35,7 @@ defaults: &defaults
     digest: true
     report: true
     emails_from_gabcom: true
+    pro_reminder: true
   interactions:
     must_be_follower: false
     must_be_following: false
