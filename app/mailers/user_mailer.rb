@@ -10,7 +10,7 @@ class UserMailer < Devise::Mailer
 
   def pro_expired(user)
     @resource = user
-    return if @resource.disabled?
+    return if @resource.disabled? || !@resource.allows_pro_reminder_emails? || !@resource.confirmed?
 
     I18n.with_locale(@resource.locale || I18n.default_locale) do
       mail to: @resource.email, subject: I18n.t('user_mailer.pro_expired.subject')
@@ -24,7 +24,7 @@ class UserMailer < Devise::Mailer
     return unless valid_date_ranges.include?(@date_range)
 
     @resource = user
-    return if @resource.disabled?
+    return if @resource.disabled? || !@resource.allows_pro_reminder_emails? || !@resource.confirmed?
 
     subject = "Renew GabPRO Today"
     case @date_range
@@ -54,7 +54,7 @@ class UserMailer < Devise::Mailer
     return unless valid_date_ranges.include?(@date_range)
 
     @resource = user
-    return if @resource.disabled?
+    return if @resource.disabled? || !@resource.allows_pro_reminder_emails? || !@resource.confirmed?
 
     subject = 'Gab Is Powered By You'
     case @date_range
