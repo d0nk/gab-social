@@ -505,6 +505,7 @@ en_GB:
     view: 'View:'
     view_profile: View Profile
     view_status: View status
+    opt_out: Unsubscribe
   applications:
     created: Application successfully created
     destroyed: Application successfully deleted
