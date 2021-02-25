@@ -17,6 +17,7 @@ import Text from './text'
 import DotTextSeperator from './dot_text_seperator'
 import RelativeTimestamp from './relative_timestamp'
 import DisplayName from './display_name'
+import Dummy from './dummy'
 
 class Notification extends ImmutablePureComponent {
 
@@ -30,13 +31,14 @@ class Notification extends ImmutablePureComponent {
       accounts,
       createdAt,
       type,
-      statusId,
+      status,
       isHidden,
       isUnread,
       isDeckConnected,
     } = this.props
     
     const count = !!accounts ? accounts.size : 0
+    const statusId = !!status ? status.get('id') : undefined
 
     let message
     let icon
@@ -90,6 +92,9 @@ class Notification extends ImmutablePureComponent {
         </React.Fragment>
       )
     }
+
+    const DateWrapperContainer = !!status ? NavLink : Dummy
+    const statusUrl = !!status ? status.get('uri') : '/'
 
     const containerClasses = CX({
       d: 1,
@@ -146,9 +151,14 @@ class Notification extends ImmutablePureComponent {
                     !!createdAt &&
                     <React.Fragment>
                       <DotTextSeperator />
-                      <Text size='small' color='tertiary' className={_s.ml5}>
-                        <RelativeTimestamp timestamp={createdAt} />
-                      </Text>
+                      <DateWrapperContainer
+                        to={statusUrl}
+                        className={[_s.noUnderline, _s.text].join(' ')}
+                      >
+                        <Text size='small' color='tertiary' className={_s.ml5}>
+                          <RelativeTimestamp timestamp={createdAt} />
+                        </Text>
+                      </DateWrapperContainer>
                     </React.Fragment>
                   }
                 </div>

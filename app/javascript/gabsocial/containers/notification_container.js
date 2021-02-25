@@ -63,7 +63,7 @@ const makeMapStateToProps = () => {
         accounts: accounts,
         createdAt: lastUpdated,
         isUnread: isUnread,
-        statusId: list.get('status'),
+        status: state.getIn(['statuses', list.get('status')], null),
         isDeckConnected,
       }
     } else if (!isGrouped) {
@@ -76,7 +76,7 @@ const makeMapStateToProps = () => {
         accounts: !!account ? ImmutableList([account]) : ImmutableList(),
         createdAt: notification.get('created_at'),
         isUnread: lastReadId < notification.get('id'),
-        statusId: statusId || undefined,
+        status: state.getIn(['statuses', statusId], null),
         isDeckConnected,
       }
     }
