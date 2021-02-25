@@ -16,6 +16,13 @@ import {
 
 class NotificationsPage extends React.PureComponent {
 
+  componentWillUnmount() {
+    const { selectedFilter } = this.props
+    if (selectedFilter !== 'all') {
+     this.props.dispatch(setFilter('active', 'all'))
+    }
+  }
+
   onChangeActiveFilter(notificationType) {
     this.props.dispatch(setFilter('active', notificationType))
     
