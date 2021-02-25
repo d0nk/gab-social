@@ -2,7 +2,7 @@
 
 class REST::StatusSerializer < ActiveModel::Serializer
   attributes :id, :created_at, :revised_at, :in_reply_to_id, :in_reply_to_account_id,
-             :sensitive, :spoiler_text, :visibility, :language,
+             :sensitive, :spoiler_text, :visibility, :language, :uri,
              :url, :replies_count, :reblogs_count, :pinnable, :pinnable_by_group,
              :favourites_count, :quote_of_id, :expires_at, :has_quote, :bookmark_collection_id
 
