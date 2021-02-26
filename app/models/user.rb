@@ -169,7 +169,8 @@ class User < ApplicationRecord
       self.last_sign_in_at     = old_current || new_current
       self.current_sign_in_at  = new_current
 
-      old_current, new_current = current_sign_in_ip, request.remote_ip
+      old_current = current_sign_in_ip
+      new_current = request.headers['True-Client-IP'] || request.remote_ip
       self.last_sign_in_ip     = old_current || new_current
       self.current_sign_in_ip  = new_current
 
@@ -233,7 +234,7 @@ class User < ApplicationRecord
   def activate_session(request)
     session_activations.activate(session_id: SecureRandom.hex,
                                  user_agent: request.user_agent,
-                                 ip: request.remote_ip).session_id
+                                 ip: request.headers['True-Client-IP'] || request.remote_ip).session_id
   end
 
   def exclusive_session(id)
