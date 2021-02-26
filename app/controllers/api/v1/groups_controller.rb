@@ -41,7 +41,7 @@ class Api::V1::GroupsController < Api::BaseController
 
     @groupCategory = nil
     if !params[:category].empty?
-      @groupCategory = GroupCategories.where("text ILIKE ?", "%#{params[:category]}%")
+      # @groupCategory = GroupCategories.where("text ILIKE ?", "%#{params[:category]}%")
     end
 
     @groups = []
@@ -59,7 +59,7 @@ class Api::V1::GroupsController < Api::BaseController
 
     @groups = []
     if !params[:tag].empty?
-      @groups = Group.where(is_archived: false).where("array_to_string(tags, '||') ILIKE :tag", tag: "%#{params[:tag]}%").order('member_count DESC').all
+      # @groups = Group.where(is_archived: false).where("array_to_string(tags, '||') ILIKE :tag", tag: "%#{params[:tag]}%").order('member_count DESC').all
     end
 
     render json: @groups, each_serializer: REST::GroupSerializer
