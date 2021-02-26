@@ -45,24 +45,23 @@
           %span.neutral= t('admin.accounts.no_limits_imposed')
     .report-card__summary
       - reports.each do |report|
-        .report-card__summary__item
-          .report-card__summary__item__reported-by
+        = link_to admin_report_path(report), class: "report-card__summary__item", style: "text-decoration:none;text-decoration: none;padding:10px;color: #999;font-size:15px;" do
+          .report-card__summary__item__reported-by{style: "padding: 10px 0 0 0;"}
             - if report.account.local?
-              = admin_account_link_to report.account
+              = admin_account_basic report.account
             - else
               = report.account.domain
           .report-card__summary__item__content{style: "max-width: calc(100% - 370px)!important;"}
-            = link_to admin_report_path(report) do
-              .one-line= report.comment.presence || t('admin.reports.comment.none')
+            .one-line= report.comment.presence || t('admin.reports.comment.none')
 
-              %span.report-card__summary__item__content__icon{ title: t('admin.accounts.statuses') }
-                = fa_icon('comment')
-                = report.statuses.count
+            %span.report-card__summary__item__content__icon{ title: t('admin.accounts.statuses') }
+              = fa_icon('comment')
+              = report.statuses.count
 
-              %span.report-card__summary__item__content__icon{ title: t('admin.accounts.media_attachments') }
-                = fa_icon('camera')
-                = report.media_attachments.count
+            %span.report-card__summary__item__content__icon{ title: t('admin.accounts.media_attachments') }
+              = fa_icon('camera')
+              = report.media_attachments.count
 
-          .report-card__summary__item__assigned{style: "width:220px;text-align:right;"}
+          .report-card__summary__item__assigned.hidden-sm{style: "width:220px;text-align:right;padding: 10px 0 0 0;"}
             %time.formatted{ datetime: report.created_at.iso8601 }
 = paginate @reports

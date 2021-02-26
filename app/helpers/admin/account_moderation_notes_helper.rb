@@ -12,6 +12,17 @@ module Admin::AccountModerationNotesHelper
     end
   end
 
+  def admin_account_basic(account)
+    return if account.nil?
+
+    content_tag(:span, class: name_tag_classes(account), title: account.acct) do
+      safe_join([
+        image_tag(account.avatar.url, width: 15, height: 15, alt: display_name(account), class: 'avatar'),
+        content_tag(:span, account.acct, class: 'username'),
+      ], ' ')
+    end
+  end
+
   def admin_account_inline_link_to(account)
     return if account.nil?
 
